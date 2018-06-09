@@ -99,7 +99,7 @@ void setup() {
   // - soundtrack filename (relative to sketch's folder)
   // - beats per minute in the song
   // - how many rows in Rocket correspond to one beat
-  moonlander = Moonlander.initWithSoundtrack(this, "tekno_127bpm.mp3", 127, 8);
+  moonlander = Moonlander.initWithSoundtrack(this, "Final Battle of the Dark Wizards.mp3", 127, 8);
 //  moonlander.changeLogLevel(Level.FINEST);
 
   // Last thing in setup; start Moonlander. This either
@@ -138,13 +138,20 @@ void draw() {
   float deltaTime = 1f / fps; 
 
   // Position camera
-  int cameraMode = 0;
+  int cameraMode = 2;
   if (cameraMode == 1 && smallScool.fishes.size() > 0) {
     // Chase fish
     Fish fish = smallScool.fishes.get(0);
     float blend = 0.1f;
     focusPos.set(fish.position);
     camPos.lerp(camPos,focusPos,blend);
+  }
+  else if (cameraMode == 2) {
+    // Slow rotate
+    float camMoveSpeed = 0.01;
+    float camMoveDist = 20;
+    focusPos.set(0,0,0);
+    camPos.set(-cos(time*camMoveSpeed*TURN) * camMoveDist, 0, sin(time*camMoveSpeed*TURN) * camMoveDist);
   }
   else {
     float camMoveSpeed = 0.1;
