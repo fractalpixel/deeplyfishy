@@ -2,6 +2,12 @@
 <rootElement>
 <tracks rows="10000" startRow="0" endRow="10000" rowsPerBeat="8"
 beatsPerMin="125">
+	<track name="cameraMode" folded="0" muteKeyCount="0"
+color="ffb27474">
+		<key row="0" value="2.000000" interpolation="0" />
+		<key row="564" value="1.000000" interpolation="0" />
+		<key row="692" value="2.000000" interpolation="0" />
+	</track>
 	<track name="sunWorbleAmount" folded="0" muteKeyCount="0"
 color="ffb27474">
 		<key row="0" value="0.300000" interpolation="0" />
@@ -23,6 +29,64 @@ color="ffb28050">
 		<key row="112" value="5.000000" interpolation="2" />
 		<key row="128" value="20.000000" interpolation="2" />
 		<key row="136" value="5.000000" interpolation="0" />
+	</track>
+	<track name="ruinDanceFreq" folded="0" muteKeyCount="0"
+color="ff60b250">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="835" value="0.000000" interpolation="2" />
+		<key row="839" value="1.000000" interpolation="0" />
+		<key row="928" value="0.400000" interpolation="0" />
+		<key row="1061" value="1.000000" interpolation="0" />
+		<key row="1135" value="1.000000" interpolation="2" />
+		<key row="1172" value="0.500000" interpolation="0" />
+	</track>
+	<track name="ruinDanceAmpl" folded="0" muteKeyCount="0"
+color="ff4fb292">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="835" value="0.000000" interpolation="2" />
+		<key row="839" value="2.000000" interpolation="2" />
+		<key row="844" value="0.000000" interpolation="0" />
+		<key row="870" value="0.000000" interpolation="2" />
+		<key row="874" value="2.000000" interpolation="2" />
+		<key row="881" value="0.000000" interpolation="0" />
+		<key row="904" value="0.000000" interpolation="2" />
+		<key row="907" value="2.000000" interpolation="2" />
+		<key row="914" value="0.000000" interpolation="0" />
+		<key row="933" value="0.000000" interpolation="2" />
+		<key row="936" value="0.500000" interpolation="2" />
+		<key row="944" value="1.000000" interpolation="2" />
+		<key row="947" value="0.500000" interpolation="2" />
+		<key row="970" value="0.100000" interpolation="2" />
+		<key row="974" value="0.000000" interpolation="2" />
+		<key row="978" value="4.000000" interpolation="2" />
+		<key row="985" value="0.000000" interpolation="0" />
+		<key row="1005" value="0.000000" interpolation="2" />
+		<key row="1008" value="3.000000" interpolation="2" />
+		<key row="1027" value="0.000000" interpolation="0" />
+		<key row="1038" value="0.000000" interpolation="2" />
+		<key row="1042" value="5.000000" interpolation="2" />
+		<key row="1061" value="0.000000" interpolation="2" />
+		<key row="1066" value="4.000000" interpolation="0" />
+		<key row="1097" value="4.000000" interpolation="2" />
+		<key row="1104" value="2.000000" interpolation="0" />
+		<key row="1111" value="0.000000" interpolation="2" />
+		<key row="1115" value="4.000000" interpolation="2" />
+		<key row="1128" value="2.000000" interpolation="2" />
+		<key row="1173" value="0.700000" interpolation="0" />
+	</track>
+	<track name="camMoveSpeed" folded="0" muteKeyCount="0"
+color="ff4f71b2">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="692" value="0.000000" interpolation="2" />
+		<key row="832" value="3.000000" interpolation="0" />
+	</track>
+	<track name="camMoveDist" folded="0" muteKeyCount="0"
+color="ff8850b2">
+		<key row="0" value="1.000000" interpolation="0" />
+		<key row="35" value="1.000000" interpolation="2" />
+		<key row="69" value="2.000000" interpolation="0" />
+		<key row="692" value="1.000000" interpolation="2" />
+		<key row="832" value="2.000000" interpolation="0" />
 	</track>
 </tracks>
 	</rootElement>

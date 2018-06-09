@@ -109,7 +109,7 @@ void setup() {
   // - soundtrack filename (relative to sketch's folder)
   // - beats per minute in the song
   // - how many rows in Rocket correspond to one beat
-  moonlander = Moonlander.initWithSoundtrack(this, "Final Battle of the Dark Wizards.mp3", 127, 8);
+  moonlander = Moonlander.initWithSoundtrack(this, "Final Battle of the Dark Wizards.mp3", 112, 8);
 //  moonlander.changeLogLevel(Level.FINEST);
 
   // Last thing in setup; start Moonlander. This either
@@ -156,7 +156,9 @@ void draw() {
   calcTargetPos(averageScool.target, time + 9823.3, fishTargetSpeed*0.7, fishTargetDist*1.1, 0.6, -5); 
 
   // Position camera
-  int cameraMode = moonlander.getIntValue("cameraMode");  
+  int cameraMode = moonlander.getIntValue("cameraMode");
+  float baseCamMoveSpeed =  (float) moonlander.getValue("camMoveSpeed");
+  float baseCamMoveDist =  (float) moonlander.getValue("camMoveDist");
   if (cameraMode == 1 && smallScool.fishes.size() > 0) {
     // Chase fish
     Fish fish = smallScool.fishes.get(0);
@@ -166,25 +168,25 @@ void draw() {
   }
   else if (cameraMode == 2) {
     // Slow rotate
-    float camMoveSpeed = 0.01;
-    float camMoveDist = 20;
+    float camMoveSpeed = 0.01 * baseCamMoveSpeed;
+    float camMoveDist = 20 * baseCamMoveDist;
     focusPos.set(0,0,0);
     camPos.set(-cos(time*camMoveSpeed*TURN) * camMoveDist, 0, sin(time*camMoveSpeed*TURN) * camMoveDist);
   }
   else if (cameraMode == 3) {
     // Credit cam
-    float camMoveSpeed = 0.03;
-    float camMoveDist = 20;
+    float camMoveSpeed = 0.03 * baseCamMoveSpeed;
+    float camMoveDist = 20 * baseCamMoveDist;
     focusPos.set(0,0,0);
     camPos.set(-cos(time*camMoveSpeed*TURN) * camMoveDist, 3, sin(time*camMoveSpeed*TURN) * camMoveDist*0.4+camMoveDist*0.8);
   }
   else {
-    float camMoveSpeed = 0.1;
+    float camMoveSpeed = 0.1 * baseCamMoveSpeed;
     float camMoveSpeedY = camMoveSpeed * 0.2;
-    float camMoveDist = 50;
+    float camMoveDist = 50 * baseCamMoveDist;
   
-    float focusPosSpeed = 0.89;
-    float focusPosDist = 20;
+    float focusPosSpeed = 0.89 * baseCamMoveSpeed;
+    float focusPosDist = 20 * baseCamMoveDist;
   
     calcTargetPos(camPos, time, camMoveSpeed, camMoveDist, 0.2, 0);
     calcTargetPos(focusPos, time + 3125.342, focusPosSpeed, focusPosDist, 0.5, 0);
