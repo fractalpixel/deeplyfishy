@@ -1,12 +1,4 @@
-
-/* 
- * Code for starting a demo project that
- * uses GNU Rocket and Moonlander for
- * syncing.
- *
- * You must install Moonlander as a library
- * into Processing before starting development.
- */
+import queasycam.*;
 import moonlander.library.*;
 import java.util.logging.*;
 
@@ -20,12 +12,14 @@ import ddf.minim.*;
 int CANVAS_WIDTH = 1000; //1920; //480;
 int CANVAS_HEIGHT = 600; //1080; // 360;
 
-// Our public Moonlander instance
+// For syncing with music etc
 Moonlander moonlander;
+
+// Camera
+QueasyCam cam;
 
 /*
  * settings() must be used when calling size with variable height and width
- * New in processing 3
  */
 void settings() {
   // Set up the drawing area size and renderer (P2D / P3D).
@@ -42,6 +36,11 @@ void setup() {
   
   translate(width /2, height/2);
   scale(height / 1000.0);
+  
+  cam = new QueasyCam(this);
+  cam.speed = 1.1f;
+  cam.sensitivity = 0.3f;
+  cam.friction = 0.3f;
 
   setupfishes();
 
@@ -76,14 +75,6 @@ void draw() {
 
   // Seconds since start
   float time = millis() / 1000.0;
-
-  // Center the view
-  translate(width/2, height/2, 0);
-  // Move up and backwards - away from the origin
-  translate(0, 200, -400);
-  // Rotate the viewport a bit with mouse
-  rotateY((mouseX - width/2) * 0.001);
-  rotateX((mouseY - height/2) * -0.001);
 
 
   // Get values from Rocket using 
