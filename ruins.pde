@@ -54,10 +54,12 @@ class Ruin {
     float z = group.pos.z + random(-10, 10);
     float y = terrain.heightAt(x,z);
     pos.set(x,y,z);
-    angleX = random(-10, 10);        
-    angleY = random(-10, 10);        
-    angleZ = random(-10, 10);
-    size = randomGaussian() * 2 + 0.2;
+    float ra = TURN*0.05;
+    float ya = TURN/2;
+    angleX = random(-ra, ra);        
+    angleY = random(-ya, ya);        
+    angleZ = random(-ra, ra);
+    size = random(0.1, 4);
   }
   
   void render(float deltaTime) {

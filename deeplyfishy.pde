@@ -9,6 +9,8 @@ import java.util.logging.*;
 // (even when using Moonlander)
 import ddf.minim.*;
 
+float TURN = PI*2;
+
 // These control how big the opened window is.
 // Before you release your demo, set these to 
 // full HD resolution (1920x1080).
@@ -131,21 +133,31 @@ void draw() {
   moonlander.update();
 
   // Seconds since start
-  float time = (float) moonlander.getCurrentTime();
-  //float time = millis() / 1000.0;
+  //float time = (float) moonlander.getCurrentTime();
+  float time = millis() / 1000.0;
   float deltaTime = 1f / fps; 
 
   // Position camera
-  // TODO
-  float camMoveSpeed = 0.1;
-  float camMoveSpeedY = camMoveSpeed * 0.2;
-  float camMoveDist = 50;
-
-  float focusPosSpeed = 0.1;
-  float focusPosDist = 50;
-
-  calcTargetPos(camPos, time, camMoveSpeed, camMoveDist, 0.2);
-  calcTargetPos(focusPos, time + 3125.342, focusPosSpeed, focusPosDist, 0.5);
+  int cameraMode = 0;
+  if (cameraMode == 1 && smallScool.fishes.size() > 0) {
+    // Chase fish
+    Fish fish = smallScool.fishes.get(0);
+    float blend = 0.1f;
+    focusPos.set(fish.position);
+    camPos.lerp(camPos,focusPos,blend);
+  }
+  else {
+    float camMoveSpeed = 0.1;
+    float camMoveSpeedY = camMoveSpeed * 0.2;
+    float camMoveDist = 50;
+  
+    float focusPosSpeed = 0.89;
+    float focusPosDist = 20;
+  
+    calcTargetPos(camPos, time, camMoveSpeed, camMoveDist, 0.2);
+    calcTargetPos(focusPos, time + 3125.342, focusPosSpeed, focusPosDist, 0.5);
+  }
+  
   camera.jump(camPos.x, camPos.y, camPos.z);
   camera.aim(focusPos.x, focusPos.y, focusPos.z);
   camera.feed();
@@ -167,7 +179,7 @@ void draw() {
   //fill(200, 50, 50);
   pushMatrix();
   // Center background on camera
-  translate(camX, camY, camZ);
+  translate(camPos.x, camPos.y, camPos.z);
   sphere(200);
   popMatrix();
 
