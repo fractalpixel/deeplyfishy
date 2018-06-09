@@ -1,3 +1,4 @@
+
 /* 
  * Code for starting a demo project that
  * uses GNU Rocket and Moonlander for
@@ -42,6 +43,8 @@ void setup() {
   translate(width /2, height/2);
   scale(height / 1000.0);
 
+  setupfishes();
+
   frameRate(60);
 
 
@@ -68,7 +71,6 @@ void setup() {
 void draw() {
     background(22, 66, 120);
 
-  
   // Handles communication with Rocket
   moonlander.update();
 
@@ -104,34 +106,10 @@ void draw() {
   popMatrix();
 
 
-  fill(255, 255, 0);
+    
+  // Fish
+  fill(100, 200, 255);
+  drawfishes();
   
-  
-  // Draw the bouncing ball
-  
-  pushMatrix();
-  // Calculate the sphere trajectory
-  float sphereY = abs(sin(time*2.0)) * -400.0;
-  float sphereRadius = 100;
-  
-  // Move the sphere up so it doesn't intersect with the plane
-  translate(0, -sphereRadius);
-  // Apply the bouncing motion trajectory
-  translate(0, sphereY, 0);
-  
-  // Note that this rotation should be considered happening *before* the
-  // translations specified above. The transformations are written in the reverse
-  // order they are actually applied to the rendered object. Yes, it's confusing.
-  rotateY(time);
-  
-  // Draw the sphere
-  sphere(sphereRadius);
-  popMatrix();
+
 }
-
-
-/*
- * No playback controls as in Processing_Demobase;
- * Rocket controls playing
- */
- 

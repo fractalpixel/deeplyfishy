@@ -1,7 +1,6 @@
 ArrayList<Fish> fishes = new ArrayList<Fish>();
  
-void setup() {
-  size(1500, 500, P3D);
+void setupfishes() {
   for (int i = 0; i < 100; i++) {
     fishes.add(new Fish());
   }
@@ -9,7 +8,7 @@ void setup() {
   noStroke();
 }
  
-void draw() {
+void drawfishes() {
  
   background(0);
   lights();
