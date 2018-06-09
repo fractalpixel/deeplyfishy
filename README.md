@@ -1,2 +1,2 @@
 # deeplyfishy
-Demo for Graffatron 2018
+Demo for Graffathon 2018

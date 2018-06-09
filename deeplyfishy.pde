@@ -1,6 +1,9 @@
-import queasycam.*;
+import damkjer.ocd.*;
+
+//import queasycam.*;
 import moonlander.library.*;
 import java.util.logging.*;
+
 
 // Minim is needed for the music playback
 // (even when using Moonlander)
@@ -15,8 +18,17 @@ int CANVAS_HEIGHT = 600; //1080; // 360;
 // For syncing with music etc
 Moonlander moonlander;
 
+// Ocean shaders
+PShader ocean;
+PShader oceanLight;
+
 // Camera
-QueasyCam cam;
+//QueasyCam cam;
+Camera camera;
+
+float worblePos = 0f;
+
+
 
 /*
  * settings() must be used when calling size with variable height and width
@@ -37,15 +49,29 @@ void setup() {
   translate(width /2, height/2);
   scale(height / 1000.0);
   
+  // Setup camera
+  camera = new Camera(this, -50, 5, -20);
+  camera.aim(0,0,0);
+  camera.feed();
+//  camera(0, 10, -80, 0,0,0, 0,1,0);
+/*  
   cam = new QueasyCam(this);
-  cam.speed = 10.1f;
+  cam.controllable = false;
+  cam.speed = 1.1f;
   cam.sensitivity = 1f;
   cam.friction = 0.3f;
+  cam.position.set(-20, 0, 0);
+*/
 
   setupfishes();
 
   frameRate(60);
 
+  // Load shader
+  ocean = loadShader("ocean_frag.glsl", "ocean_vert.glsl");
+  // ocean.set("fraction", 1.0);
+  oceanLight = loadShader("ocean_light_frag.glsl", "ocean_light_vert.glsl");
+  
 
   // Parameters: 
   // - PApplet
@@ -59,7 +85,7 @@ void setup() {
   // connects to Rocket (development mode) or loads data 
   // from 'syncdata.rocket' (player mode).
   // Also, in player mode the music playback starts immediately.
-//  moonlander.start("localhost", 9001, "syncfile");
+  //moonlander.start("localhost", 9001, "syncfile");
   moonlander.start();
 }
 
@@ -68,42 +94,59 @@ void setup() {
  * Processing's drawing method
  */
 void draw() {
-    background(22, 66, 120);
+  background(128);
+  fill(255);
 
   // Handles communication with Rocket
   moonlander.update();
 
   // Seconds since start
-  float time = millis() / 1000.0;
+  float time = (float) moonlander.getCurrentTime();
+  //float time = millis() / 1000.0;
+  float deltaTime = 1f / 60;
 
+  // Position camera
+  // TODO
+  camera.jump(-10,0,0);
+  camera.aim(0,0,0);
+  camera.feed();
 
   // Get values from Rocket using 
   // moonlander.getValue("track_name") or
   // moonlander.getIntValue("track_name")
   
-  fill(255);
   
+  // Debug lines
+  noStroke();
+ // stroke(0,255, 0);
+   
+
+  //lights();
+
+  // Sunlight
+  float sunWorbleAmount = (float) moonlander.getValue("sunWorbleAmount");
+  float sunWorbleSpeed = (float) moonlander.getValue("sunWorbleSpeed");
+  worblePos += deltaTime*sunWorbleSpeed;
+  directionalLight(255, 255, 255, sin(worblePos)*sunWorbleAmount, 10, cos(worblePos)*sunWorbleAmount);
   
-  // Draw the ground plane
-  
+  // Ocean background
+  shader(ocean);
+  fill(200, 50, 50);
   pushMatrix();
-  // Rotate the plane by 90 degrees so it's laying on the ground 
-  // instead of facing the camera. Try to use `secs` instead and 
-  // see what happens :)
-  rotateX(PI/2);
-  scale(6.0);
-  // Draw the plane
-  rect(0, 0, 100, 100);
+  resetMatrix();
+  translate(camera.position()[0], camera.position()[1], camera.position()[2]-20);
+  sphere(500);
   popMatrix();
 
+  // Things in ocean
+  shader(oceanLight);
 
-    
   // Fish
   fill(100, 200, 255);
   drawfishes();
-  
-  // Red blob at origo
-  fill(255, 0, 0);
+
+  // DEBUG: Red blob at origo
+  fill(255, 100, 100);
   sphere(1);
 
 }

@@ -9,8 +9,6 @@ void setupfishes() {
 void drawfishes() {
   smallScool.drawScool();
  
-  background(0);
-  lights();
  
   
   
