@@ -13,9 +13,9 @@ class Ruins {
     }
   }
   
-  void render(float deltaTime) {
+  void render(float time, float deltaTime) {
     for (RuinGroup group: groups) {
-      group.render(deltaTime);
+      group.render(time, deltaTime);
     }
   }
 }
@@ -34,9 +34,9 @@ class RuinGroup {
     }
   }
   
-  void render(float deltaTime) {
+  void render(float time, float deltaTime) {
     for (Ruin ruin: ruins) {
-      ruin.render(deltaTime);
+      ruin.render(time, deltaTime);
     }
   }
 }
@@ -48,6 +48,7 @@ class Ruin {
   float angleY = 0;
   float angleZ = 0;
   float size = 10;
+  float seed;
   
   Ruin (RuinGroup group) {
     float x = group.pos.x + random(-10, 10);
@@ -60,17 +61,27 @@ class Ruin {
     angleY = random(-ya, ya);        
     angleZ = random(-ra, ra);
     size = random(0.1, 4);
+    seed = random(0, 100);
   }
   
-  void render(float deltaTime) {
+  void render(float time, float deltaTime) {
+    float ruinDance = (float) moonlander.getValue("ruinDanceFreq");
+    float ruinDanceAmpl = (float) moonlander.getValue("ruinDanceAmpl");
+    
     pushStyle();
     pushMatrix();
 
     // Position
-    translate(pos.x, pos.y, pos.z);
-    rotateX(angleX);
-    rotateY(angleY);
-    rotateZ(angleZ);
+    float freq =100;
+    float angleFreq = 0.2*freq;
+    float bassAmount = ruinDanceAmpl*0.3;
+    float discantAmount = ruinDanceAmpl*0.02;
+    translate(pos.x + 0.3*ruinDance * shakyNoise(time, freq, bassAmount, discantAmount, 1234.213*seed), 
+              pos.y + ruinDance * shakyNoise(time, freq, bassAmount, discantAmount, 8734.234*seed), 
+              pos.z + 0.3*ruinDance * shakyNoise(time, freq, bassAmount, discantAmount, 7313.173*seed));
+    rotateX(angleX + ruinDance * shakyNoise(time, angleFreq, bassAmount, discantAmount, 896.45*seed));
+    rotateY(angleY + ruinDance * shakyNoise(time, angleFreq, bassAmount, discantAmount, 1534.3*seed));
+    rotateZ(angleZ + ruinDance * shakyNoise(time, angleFreq, bassAmount, discantAmount, 312.312*seed));
     
     // Render
     fill(220, 180, 120);

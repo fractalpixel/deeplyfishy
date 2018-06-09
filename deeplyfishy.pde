@@ -43,9 +43,14 @@ float sinNoise(float t, float x) {
   return 0.5*sin(t * x) + 0.5*cos(t * 0.31232 * x) + 0.5*sin( (t * 0.123 + cos(t * 0.001351)) * 0.871 * x);
 }
 
-void calcTargetPos(PVector pos, float time, float speed, float mag, float yScale) {
+float shakyNoise(float time, float freq, float bass, float discant, float seed) {
+  return (noise(time * 0.2*freq, seed * 123.321) * 2 - 1) * bass +
+         (noise(time * 1*freq, seed * 887.213) * 2 - 1) * discant; 
+}
+
+void calcTargetPos(PVector pos, float time, float speed, float mag, float yScale, float yDelta) {
   pos.x = sinNoise(time + 782.213, speed) * mag;
-  pos.y = sinNoise(time + 3712.321, speed * yScale) * mag;
+  pos.y = sinNoise(time + 3712.321, speed * yScale) * mag + yDelta;
   pos.z = sinNoise(time + 12.876, speed) * mag;
 }
 
@@ -145,15 +150,13 @@ void draw() {
   scroller.render(time, deltaTime);
 
   // Update fish targets
-  float fishTargetSpeed = 0.3;
+  float fishTargetSpeed = 0.05;
   float fishTargetDist = 5;
-  calcTargetPos(smallScool.target, time+31.32, fishTargetSpeed, fishTargetDist*0.8, 0.5); 
-  calcTargetPos(averageScool.target, time + 9823.3, fishTargetSpeed*0.7, fishTargetDist*1.1, 0.6); 
-  calcTargetPos(bigScool.target, time+17234.32, fishTargetSpeed*2.2, fishTargetDist*1.4, 0.9); 
-
+  calcTargetPos(smallScool.target, time+31.32, fishTargetSpeed, fishTargetDist*0.8, 0.5, -10); 
+  calcTargetPos(averageScool.target, time + 9823.3, fishTargetSpeed*0.7, fishTargetDist*1.1, 0.6, -5); 
 
   // Position camera
-  int cameraMode = 3;
+  int cameraMode = moonlander.getIntValue("cameraMode");  
   if (cameraMode == 1 && smallScool.fishes.size() > 0) {
     // Chase fish
     Fish fish = smallScool.fishes.get(0);
@@ -183,8 +186,8 @@ void draw() {
     float focusPosSpeed = 0.89;
     float focusPosDist = 20;
   
-    calcTargetPos(camPos, time, camMoveSpeed, camMoveDist, 0.2);
-    calcTargetPos(focusPos, time + 3125.342, focusPosSpeed, focusPosDist, 0.5);
+    calcTargetPos(camPos, time, camMoveSpeed, camMoveDist, 0.2, 0);
+    calcTargetPos(focusPos, time + 3125.342, focusPosSpeed, focusPosDist, 0.5, 0);
   }
   
   camera.jump(camPos.x, camPos.y, camPos.z);
@@ -225,7 +228,7 @@ void draw() {
   terrain.render();
 
   // Ruins 
-  ruins.render(deltaTime);
+  ruins.render(time, deltaTime);
 
   // Fish
   fill(100, 200, 255);
@@ -233,8 +236,7 @@ void draw() {
   noStroke();
 
   // DEBUG: Red blob at origo
-  fill(255, 100, 100);
-  
-  sphere(1);
+  // fill(255, 100, 100);
+  // sphere(1);
 
 }
