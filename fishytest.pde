@@ -30,6 +30,7 @@ class Scool {
   ArrayList<Scool>  predators = new ArrayList<Scool>(); 
   Scool prey;
   PVector scoolCenter;
+  float scoolSpeedMod = 1;
 
   
   Scool(int amount,PVector averageStartPosition, float positionSpread, float minsize, float maxSize, float speedModifier, 
@@ -67,7 +68,7 @@ class Scool {
       f.render(deltaTime);
     //  //println("rendering fish");
       
-      f.step(fishes, deltaTime, target, avoidThese, 3, predators, scoolCenter.copy());
+      f.step(fishes, deltaTime, target, avoidThese, 3, predators, scoolCenter.copy(), scoolSpeedMod);
       
     } 
 
@@ -118,7 +119,7 @@ class Fish {
  
 
  
-  void step(ArrayList<Fish> fishes, float deltaTime, PVector target, ArrayList<PVector> avoidThese, float avoidDist, ArrayList<Scool> predators, PVector scoolCenter) {
+  void step(ArrayList<Fish> fishes, float deltaTime, PVector target, ArrayList<PVector> avoidThese, float avoidDist, ArrayList<Scool> predators, PVector scoolCenter, float scoolSpeedMod) {
     PVector center = new PVector();
     PVector avoid = new PVector();
     PVector toward = new PVector();
@@ -202,7 +203,7 @@ class Fish {
     
     
     
-    PVector temp = velocition.copy().mult(deltaTime);
+    PVector temp = velocition.copy().mult(deltaTime).mult(scoolSpeedMod);
      position.add(temp);
       
      
