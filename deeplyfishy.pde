@@ -38,8 +38,8 @@ void setup() {
   scale(height / 1000.0);
   
   cam = new QueasyCam(this);
-  cam.speed = 1.1f;
-  cam.sensitivity = 0.3f;
+  cam.speed = 10.1f;
+  cam.sensitivity = 1f;
   cam.friction = 0.3f;
 
   setupfishes();
@@ -102,5 +102,7 @@ void draw() {
   fill(100, 200, 255);
   drawfishes();
   
+  fill(255, 0, 0);
+  sphere(10);
 
 }
