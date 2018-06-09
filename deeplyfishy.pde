@@ -11,6 +11,7 @@ import ddf.minim.*;
 // full HD resolution (1920x1080).
 int CANVAS_WIDTH = 1000; //1920; //480;
 int CANVAS_HEIGHT = 600; //1080; // 360;
+int fps = 60;
 
 // For syncing with music etc
 Moonlander moonlander;
@@ -41,10 +42,13 @@ void setup() {
   cam.speed = 10.1f;
   cam.sensitivity = 1f;
   cam.friction = 0.3f;
+  cam.position.x = -5;
+  cam.position.y = 0;
+  cam.position.z = 0;
 
   setupfishes();
 
-  frameRate(60);
+  frameRate(fps);
 
 
   // Parameters: 
@@ -75,6 +79,7 @@ void draw() {
 
   // Seconds since start
   float time = millis() / 1000.0;
+  float deltaTime = 1f/fps; 
 
 
   // Get values from Rocket using 
@@ -100,7 +105,7 @@ void draw() {
     
   // Fish
   fill(100, 200, 255);
-  drawfishes();
+  drawfishes(deltaTime);
   
   // Red blob at origo
   fill(255, 0, 0);
