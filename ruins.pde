@@ -57,7 +57,7 @@ class Ruin {
     angleX = random(-10, 10);        
     angleY = random(-10, 10);        
     angleZ = random(-10, 10);
-    size = random(1, 5);
+    size = randomGaussian() * 2 + 0.2;
   }
   
   void render(float deltaTime) {

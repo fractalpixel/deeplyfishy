@@ -1,7 +1,7 @@
 class Terrain {
   int sizeX;
   int sizeZ;
-  float frequency = 30;
+  float frequency = 15;
   float amplitude = 15;
   
   float cellSize = 0.2f;
@@ -63,7 +63,7 @@ class Terrain {
   }
   
   float heightAt(float x, float z) {
-    float h = 2;
+    float h = roughHeightAt(x, z);
     
     float a = 3.0;
     float s = 0.01;
@@ -72,16 +72,20 @@ class Terrain {
 
     float scale = 5; 
     h += noise(sx/frequency+32.123, sz/frequency+7657.234) * amplitude;
-    h += noise(123.321 + sx/(frequency*scale), 7321.321 + sz/(frequency*scale)) * amplitude * 0.2;
+    h += noise(123.321 + sx/(frequency*scale), 7321.321 + sz/(frequency*scale)) * amplitude * 0.5;
     
-    h += (x*x + z*z) * 0.01 - 4;
-    
+    return h;
+  }
+
+  float roughHeightAt(float x, float z) {
+    // Hill
+    float h = (x*x + z*z) * 0.01 - 2;
     return h;
   }
 
   void normalAt(float x, float z, PVector normal) {
     // Based on: https://stackoverflow.com/questions/13983189/opengl-how-to-calculate-normals-in-a-terrain-height-grid
-    float d = cellSize;
+    float d = cellSize/2;
     float hL = heightAt(x-d, z);
     float hR = heightAt(x+d, z);
     float hD = heightAt(x, z-d);
