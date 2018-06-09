@@ -1,23 +1,41 @@
-ArrayList<Fish> fishes = new ArrayList<Fish>();
+Scool smallScool;
  
 void setupfishes() {
-  for (int i = 0; i < 100; i++) {
-    fishes.add(new Fish());
-  }
+
  
-  noStroke();
+  smallScool = new Scool(100);
 }
  
 void drawfishes() {
+  smallScool.drawScool();
  
   background(0);
   lights();
  
-  for (Fish f : fishes) {
-    f.render();
-    f.step();
-  }
+  
+  
 }
+
+class Scool {
+  ArrayList<Fish> fishes = new ArrayList<Fish>();
+  int scoolsize;
+  
+  Scool(int amount){
+    scoolsize = amount;
+    for (int i = 0; i < amount; i++) {
+      fishes.add(new Fish());
+    }
+  }
+  
+  void drawScool(){
+    for (Fish f : fishes) {
+      f.render();
+      //f.step(fishes);
+    } 
+  }
+}  
+
+
  
 class Fish {
   PVector position = new PVector(random(width), random(height), random(height));
@@ -30,17 +48,17 @@ class Fish {
     popMatrix();
   }
  
-  void step() {
+  void step(ArrayList<Fish> fishes) {
     PVector center = new PVector();
     PVector avoid = new PVector();
     PVector toward = new PVector();
     for (Fish f : fishes){
-        center = findMass(f);
+        center = findMass(f, fishes);
         //avoid = avoidFriends(f);
         toward = tovardPosition(f,new PVector(0,0,0));
         f.velocition.add(center);
         f.velocition.add(avoid);
-        //f.velocition.add(toward);
+        f.velocition.add(toward);
         f.velocition.div(100);
         f.position.add(f.velocition);
       
@@ -50,7 +68,7 @@ class Fish {
   }
   
   
-  PVector findMass(Fish thisFish){
+  PVector findMass(Fish thisFish, ArrayList<Fish> fishes){
     PVector centerOfMass = new PVector();
     int num = 0;
     for (Fish f : fishes){
@@ -67,7 +85,7 @@ class Fish {
   }  
 
 
-  PVector avoidFriends(Fish thisFish){
+  PVector avoidFriends(Fish thisFish, ArrayList<Fish> fishes){
     PVector avoidance = new PVector();
     for (Fish f : fishes){
       if (f != thisFish && f.position.dist(thisFish.position) < 10) {
