@@ -12,8 +12,8 @@ import ddf.minim.*;
 // These control how big the opened window is.
 // Before you release your demo, set these to 
 // full HD resolution (1920x1080).
-int CANVAS_WIDTH = 1700;// 1920; //480;
-int CANVAS_HEIGHT = 900;//1080; // 360;
+int CANVAS_WIDTH = 1400;// 1920; //480;
+int CANVAS_HEIGHT = 800;//1080; // 360;
 
 int fps = 60;
 
@@ -31,6 +31,7 @@ Camera camera;
 float worblePos = 0f;
 
 Ruins ruins;
+Terrain terrain;
 
 /*
  * settings() must be used when calling size with variable height and width
@@ -95,8 +96,12 @@ void setup() {
   //moonlander.start("localhost", 9001, "syncfile");
   moonlander.start();
   
+  terrain = new Terrain(100, 100);
+  terrain.init();
+
   ruins = new Ruins();
-  ruins.init();
+  ruins.init(terrain);
+  
 }
 
 
@@ -134,8 +139,8 @@ void draw() {
   //lights();
 
   // Sunlight
-  float sunWorbleAmount = (float) moonlander.getValue("sunWorbleAmount");
-  float sunWorbleSpeed = (float) moonlander.getValue("sunWorbleSpeed");
+  float sunWorbleAmount = (float) moonlander.getValue("sunWorbleAmount") * 100;
+  float sunWorbleSpeed = (float) moonlander.getValue("sunWorbleSpeed") / 10;
   worblePos += deltaTime*sunWorbleSpeed;
   directionalLight(255, 255, 255, sin(worblePos)*sunWorbleAmount, 10, cos(worblePos)*sunWorbleAmount);
   
@@ -151,6 +156,9 @@ void draw() {
 
   // Things in ocean
   shader(oceanLight);
+
+  // Terrain
+  terrain.render();
 
   // Ruins 
   ruins.render(deltaTime);

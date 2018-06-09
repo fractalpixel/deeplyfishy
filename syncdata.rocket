@@ -4,15 +4,25 @@
 beatsPerMin="125">
 	<track name="sunWorbleAmount" folded="0" muteKeyCount="0"
 color="ffb27474">
-		<key row="0" value="0.500000" interpolation="0" />
-		<key row="40" value="0.500000" interpolation="1" />
-		<key row="56" value="1.000000" interpolation="0" />
+		<key row="0" value="0.300000" interpolation="0" />
+		<key row="40" value="0.300000" interpolation="1" />
+		<key row="56" value="1.000000" interpolation="1" />
+		<key row="80" value="0.200000" interpolation="2" />
+		<key row="96" value="0.500000" interpolation="2" />
+		<key row="112" value="0.100000" interpolation="2" />
+		<key row="128" value="1.000000" interpolation="2" />
+		<key row="136" value="0.200000" interpolation="0" />
 	</track>
 	<track name="sunWorbleSpeed" folded="0" muteKeyCount="0"
 color="ffb28050">
-		<key row="0" value="10.000000" interpolation="0" />
-		<key row="40" value="10.000000" interpolation="1" />
-		<key row="56" value="20.000000" interpolation="0" />
+		<key row="0" value="3.000000" interpolation="0" />
+		<key row="40" value="3.000000" interpolation="1" />
+		<key row="56" value="10.000000" interpolation="1" />
+		<key row="80" value="5.000000" interpolation="2" />
+		<key row="96" value="10.000000" interpolation="2" />
+		<key row="112" value="5.000000" interpolation="2" />
+		<key row="128" value="20.000000" interpolation="2" />
+		<key row="136" value="5.000000" interpolation="0" />
 	</track>
 </tracks>
 	</rootElement>

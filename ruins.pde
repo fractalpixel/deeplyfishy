@@ -2,8 +2,10 @@
 class Ruins {
 
   ArrayList<RuinGroup> groups = new ArrayList();
+  Terrain terrain;
 
-  void init() {
+  void init(Terrain terrain) {
+    this.terrain = terrain;
     int num = 100;
     for (int i = 0; i < num; i++) {
       RuinGroup group = new RuinGroup();
@@ -48,9 +50,10 @@ class Ruin {
   float size = 10;
   
   Ruin (RuinGroup group) {
-    pos.set(group.pos.x + random(-10, 10),
-            group.pos.y, 
-            group.pos.z + random(-10, 10));
+    float x = group.pos.x + random(-10, 10);
+    float z = group.pos.z + random(-10, 10);
+    float y = terrain.heightAt(x,z);
+    pos.set(x,y,z);
     angleX = random(-10, 10);        
     angleY = random(-10, 10);        
     angleZ = random(-10, 10);
@@ -62,7 +65,7 @@ class Ruin {
     pushMatrix();
 
     // Position
-    translate(-pos.x, -pos.y, -pos.z);
+    translate(pos.x, pos.y, pos.z);
     rotateX(angleX);
     rotateY(angleY);
     rotateZ(angleZ);

@@ -70,13 +70,22 @@ class Fish {
   void render(float deltaTime) {
     tailPos += deltaTime;
     moutPos += deltaTime;
+    
+    
     pushMatrix();
     
     //rotate(velocition);
     translate(position.x, position.y, position.z);
     scale(size);
+
+    // Determine xz direction
+    float x = velocition.x;
+    float z = velocition.z;
+    // Rotate around y
+    float angle = atan2(-z, x);
+    rotateY(angle);
     
-    rotateY(radians(90));
+    //rotateY(radians(90));
     rotateX(radians(180));
     translate(0, 0.4, 0);
     fill(220, 190, 100);
@@ -299,6 +308,8 @@ class Fish {
     PVector match = new PVector();
     PVector avoidObj = new PVector();
     PVector velocityChange = new PVector();
+    
+    float relativeMaxYVelocity = 0.2;
 
     center = findMass(this, fishes, searchDist, contentDist);
     avoid = avoidFriends(this, fishes);
@@ -307,10 +318,21 @@ class Fish {
     avoidObj = avoidObjects(avoidThese,this,avoidDist).mult(100000);
     velocityChange.add(center).add(avoid).add(toward).add(match).add(avoidObj);
     velocityChange.mult(deltaTime);
+    
+    // Reduce y velocity change, slower for fishes
+    velocityChange.y = velocityChange.y * relativeMaxYVelocity;
+    
     if (velocityChange.mag() > maxVelocityChange){
       velocityChange.normalize().mult(maxVelocityChange);  
     }
     velocition.add(velocityChange);
+
+    // Clamp y velocity
+    if (abs(velocition.y) > maxVelocity * relativeMaxYVelocity) {
+      float sign = 1;
+      if (velocition.y < 0) sign = -1;
+      velocition.y = sign * maxVelocity * relativeMaxYVelocity;
+    }
 
     if (velocition.mag() > maxVelocity){
        velocition.normalize().mult(maxVelocity); 
