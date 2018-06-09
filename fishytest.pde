@@ -105,6 +105,16 @@ class Fish {
     vertex(0,0, 0.5);
     vertex(-2, 0, 0);
     
+    //tail
+    float tailz = random(-0.2, 0.2);
+    vertex(-2, 0,0);
+    vertex(-3.5, 1, tailz);
+    vertex(-3, 0, tailz);
+    
+    vertex(-2, 0,0);
+    vertex(-3.5, -1, tailz);
+    vertex(-3, 0, tailz);
+    
     
     endShape();
     //sphere(size);
