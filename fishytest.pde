@@ -58,11 +58,27 @@ class Fish {
   float size = random(0.05, 0.2);
  
   void render() {
-    pushMatrix();
+    /*pushMatrix();
     translate(position.x, position.y, position.z);
     
     sphere(size);
-    popMatrix();
+    popMatrix();*/
+    
+    fill(48, 138,206,63);
+stroke(48,138,206,191);
+pushMatrix();
+float r = size;
+
+ translate(position.x, position.y, position.z);
+beginShape();
+vertex(r*15.0, r*17.0, r); //Left wing tip
+vertex(r*25.0, r*10.0); //Left wing top point
+vertex(r*30.0, r*13.0, r*10.0); //middle
+vertex(r*35.0, r*10.0 ); //right wing top point
+vertex(r*45.0, r*17.0, r); //right wing tip
+vertex(r*30.0, r*13.0); //underpart
+endShape();
+popMatrix();
    // println(position.toString());
   }
  
@@ -78,7 +94,7 @@ class Fish {
     avoid = avoidFriends(this, fishes);
     toward = tovardPosition(this,target).mult(100);
     match = matchSpeed(this,fishes);
-    avoidObj = avoidObjects(avoidThese,this,avoidDist).mult(100);
+    avoidObj = avoidObjects(avoidThese,this,avoidDist).mult(100000);
     velocityChange.add(center).add(avoid).add(toward).add(match).add(avoidObj);
     velocityChange.mult(deltaTime);
     if (velocityChange.mag() > maxVelocityChange){
@@ -180,8 +196,13 @@ class Fish {
     PVector distToObjectVec = new PVector();
     for (PVector object : objects){
          distToObjectVec = object.copy().sub(thisFish.position);
-         if (distToObjectVec.mag() < distToAvoid*2){
-             avoidDirection.sub(distToObjectVec);
+         float dot = distToObjectVec.dot(thisFish.velocition);
+         if (distToObjectVec.mag() < distToAvoid*2 && dot > 0){
+             PVector distChange = distToObjectVec.copy().normalize().mult(-dot);
+             avoidDirection.sub(distChange).normalize();
+             float avoidSpeed = ((distToAvoid*2) - distToObjectVec.mag())/distToAvoid*2;
+             avoidDirection.mult(-avoidSpeed);
+             //println(avoidDirection.mag());
          }
     }
     return avoidDirection;
