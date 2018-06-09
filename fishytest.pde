@@ -6,6 +6,8 @@ void setupfishes() {
   smallScool = new Scool(100, new PVector(12.5, -17.5, -7.5), 2.5, 0.05, 0.2);
   averageScool = new Scool(50, new PVector(-12.5, -17.5, -7.5), 2.5, 0.25, 1);
   bigScool = new Scool(3, new PVector(-22.5, -17.5, -7.5), 10, 2, 5);
+  smallScool.predators = bigScool;
+  averageScool.predators = bigScool;
   noStroke();
 }
  
@@ -18,6 +20,9 @@ void drawfishes(float deltaTime) {
 class Scool {
   ArrayList<Fish> fishes = new ArrayList<Fish>();
   int scoolsize;
+  PVector target=  new PVector(0,-2,0);
+  ArrayList<PVector> avoidThese = new ArrayList<PVector>(); 
+  Scool predators; 
 
   
   Scool(int amount,PVector averageStartPosition, float positionSpread, float minsize, float maxSize ){
@@ -36,15 +41,13 @@ class Scool {
   
   
   void drawScool(float deltaTime){
-    PVector target=  new PVector(0,-2,0);
-    PVector avoid = new PVector(0,0,0);
-    ArrayList<PVector> avoidThese = new ArrayList<PVector>(); 
-    avoidThese.add(avoid);
+    
+    
     for (Fish f : fishes) {
       f.render(deltaTime);
     //  //println("rendering fish");
     
-      f.step(fishes, deltaTime, target, avoidThese, 3);
+      f.step(fishes, deltaTime, target, avoidThese, 3, predators);
       
     } 
 
@@ -72,7 +75,9 @@ class Fish {
   float moutSpeed = random(5, 10);
   color fishColor = color(random(0, 175), random(100, 255), 255);
   color finColor = color(random(0, 100), random(200, 255), random(100, 255));
-  float minDistToBottom = 0.1;
+  float minDistToBottom = size*4;
+  //0 = calm , 5= terrified,
+  int terror = 0;
   
   Fish(PVector averageStartPosition, float positionSpread, float minsize, float maxSize){
         position = new PVector(random(averageStartPosition.x-positionSpread, averageStartPosition.x+positionSpread), random(averageStartPosition.y-positionSpread, averageStartPosition.y+positionSpread), random(averageStartPosition.z-positionSpread, averageStartPosition.z+positionSpread));
@@ -81,7 +86,7 @@ class Fish {
  
 
  
-  void step(ArrayList<Fish> fishes, float deltaTime, PVector target, ArrayList<PVector> avoidThese, float avoidDist) {
+  void step(ArrayList<Fish> fishes, float deltaTime, PVector target, ArrayList<PVector> avoidThese, float avoidDist, Scool predators) {
     PVector center = new PVector();
     PVector avoid = new PVector();
     PVector toward = new PVector();
@@ -104,28 +109,60 @@ class Fish {
     if (velocityChange.mag() > maxVelocityChange){
       velocityChange.normalize().mult(maxVelocityChange);  
     }
-    velocition.add(velocityChange);
+    //do normal swimming if not terrified
+    if (terror <= 2){
+      velocition.add(velocityChange);
+    }
+    //check for predators
+    float distToPredator = 0;
+    if (predators != null){
+    for (Fish predator : predators.fishes){
+         distToPredator = predator.position.dist(position);
+         if (distToPredator < 2){
+           terror = 5;
+           
+           PVector direction = position.copy().sub(predator.position).normalize();
+           velocition = direction.mult(maxVelocity);
+           break;
+         }
+    }
+    }
+    //to not collide in bottom
     float bottomY = -terrain.roughHeightAt(position.x,position.y);
     float bottomDist = abs(position.y-bottomY);
     if (velocition.y < 0 && bottomDist < minDistToBottom){
       velocition.y += maxVelocityChange;
     } 
-    if (bottomDist < 0){
+    if (bottomDist < size*2){
       velocition.y = maxVelocityChange;
     }  
     // Clamp y velocity
-    if (abs(velocition.y) > maxVelocity * relativeMaxYVelocity) {
+    if (abs(velocition.y) > maxVelocity * relativeMaxYVelocity *(terror+1)) {
       float sign = 1;
       if (velocition.y < 0) sign = -1;
-      velocition.y = sign * maxVelocity * relativeMaxYVelocity;
+      velocition.y = sign * maxVelocity * relativeMaxYVelocity *(terror+1);
     }
-
-    if (velocition.mag() > maxVelocity){
-       velocition.normalize().mult(maxVelocity); 
+    //if terrified
+    if (terror >= 1){
+      if (velocition.mag() > maxVelocity*terror){
+         velocition.normalize().mult(maxVelocity); 
+      }
+      else if (velocition.mag() < minVelosity*terror){
+        velocition.normalize().mult(minVelosity);
+       
+      }
+    terror --;  
+  }  
+    else{
+      if (velocition.mag() > maxVelocity){
+         velocition.normalize().mult(maxVelocity); 
+      }
+      else if (velocition.mag() < minVelosity){
+        velocition.normalize().mult(minVelosity);      
     }
-    else if (velocition.mag() < minVelosity){
-      velocition.normalize().mult(minVelosity);
-    }  
+    }
+    
+    
     
     PVector temp = velocition.copy().mult(deltaTime);
      position.add(temp);
