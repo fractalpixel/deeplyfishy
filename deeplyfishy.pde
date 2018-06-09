@@ -15,6 +15,8 @@ import ddf.minim.*;
 int CANVAS_WIDTH = 1000; //1920; //480;
 int CANVAS_HEIGHT = 600; //1080; // 360;
 
+int fps = 60;
+
 // For syncing with music etc
 Moonlander moonlander;
 
@@ -28,7 +30,7 @@ Camera camera;
 
 float worblePos = 0f;
 
-
+Ruins ruins;
 
 /*
  * settings() must be used when calling size with variable height and width
@@ -50,7 +52,7 @@ void setup() {
   scale(height / 1000.0);
   
   // Setup camera
-  camera = new Camera(this, -50, 5, -20);
+  camera = new Camera(this, -20, 0, 0);
   camera.aim(0,0,0);
   camera.feed();
 //  camera(0, 10, -80, 0,0,0, 0,1,0);
@@ -61,11 +63,14 @@ void setup() {
   cam.sensitivity = 1f;
   cam.friction = 0.3f;
   cam.position.set(-20, 0, 0);
+  cam.position.x = -5;
+  cam.position.y = 0;
+  cam.position.z = 0;
 */
 
   setupfishes();
-
-  frameRate(60);
+  
+  frameRate(fps);
 
   // Load shader
   ocean = loadShader("ocean_frag.glsl", "ocean_vert.glsl");
@@ -87,6 +92,9 @@ void setup() {
   // Also, in player mode the music playback starts immediately.
   //moonlander.start("localhost", 9001, "syncfile");
   moonlander.start();
+  
+  ruins = new Ruins();
+  ruins.init();
 }
 
 
@@ -103,7 +111,7 @@ void draw() {
   // Seconds since start
   float time = (float) moonlander.getCurrentTime();
   //float time = millis() / 1000.0;
-  float deltaTime = 1f / 60;
+  float deltaTime = 1f / fps; 
 
   // Position camera
   // TODO
@@ -131,22 +139,27 @@ void draw() {
   
   // Ocean background
   shader(ocean);
-  fill(200, 50, 50);
+  //fill(200, 50, 50);
   pushMatrix();
   resetMatrix();
-  translate(camera.position()[0], camera.position()[1], camera.position()[2]-20);
-  sphere(500);
+  // Center background on camera
+  translate(camera.position()[0], camera.position()[1], camera.position()[2]);
+  sphere(200);
   popMatrix();
 
   // Things in ocean
   shader(oceanLight);
 
+  // Ruins 
+  ruins.render(deltaTime);
+
   // Fish
   fill(100, 200, 255);
-  drawfishes();
+  drawfishes(deltaTime);
 
   // DEBUG: Red blob at origo
   fill(255, 100, 100);
+  
   sphere(1);
 
 }
