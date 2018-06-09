@@ -72,37 +72,61 @@ class Fish {
     stroke(0,0,0);
     //head
     //shape.stroke(0,0,255);
+    normal(0, 0, -1);
     vertex(0,0,-0.5);
+    normal(0, -1, 0);
     vertex(0,-1,0);
+    normal(1, 0, 0);
     vertex(1, 0,0);
     
+    normal(0, 0, -1);
     vertex(0,0,-0.5);
+    normal(1, 0, 0);
     vertex(1, 0,0);
+    normal(0, 1, 0);
     vertex(0, 1,0);
      
+    normal(1, 0, 0);
     vertex(1, 0,0);
+    normal(0, 1, 0);
     vertex(0, 1,0);
+    normal(0, 0, 1);
     vertex(0,0,0.5);
     
+    normal(1, 0, 0);
     vertex(1, 0,0);
+    normal(0, 0, 1);
     vertex(0,0,0.5);
+    normal(0, -1, 0);
     vertex(0,-1,0);
     
     //Body
+    normal(0, 1, 0);
     vertex(0,1,0);
+    normal(0, 0, 1);
     vertex(0, 0, -0.5);
+    normal(0, 0, -1);
     vertex(-2, 0,0);
     
     vertex(0,0, 0.5);
+    normal(0, 1, 0);
+    normal(0, 0, -1);
     vertex(0,1,0);
+    normal(0, 0, 1);
     vertex(-2, 0,0);
     
+    normal(0, -1, 0);
     vertex(0, -1, 0);
+    normal(0, 0, -1);
     vertex(0, 0, -0.5);
+    normal(0, 0, -1);
     vertex(-2, 0,0);
     
+    normal(0, -1, 0);
     vertex(0, -1, 0);
+    normal(0, 0, 1);
     vertex(0,0, 0.5);
+    normal(0, 0, 1);
     vertex(-2, 0, 0);
     
     

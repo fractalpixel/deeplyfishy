@@ -12,8 +12,8 @@ import ddf.minim.*;
 // These control how big the opened window is.
 // Before you release your demo, set these to 
 // full HD resolution (1920x1080).
-int CANVAS_WIDTH = 1000; //1920; //480;
-int CANVAS_HEIGHT = 600; //1080; // 360;
+int CANVAS_WIDTH = 1700;// 1920; //480;
+int CANVAS_HEIGHT = 900;//1080; // 360;
 
 int fps = 60;
 
@@ -46,6 +46,8 @@ void settings() {
  * Do all your one-time setup routines in here.
  */
 void setup() {
+  randomSeed(872219);
+  
   rectMode(CENTER);
   
   translate(width /2, height/2);
@@ -156,6 +158,7 @@ void draw() {
   // Fish
   fill(100, 200, 255);
   drawfishes(deltaTime);
+  noStroke();
 
   // DEBUG: Red blob at origo
   fill(255, 100, 100);
