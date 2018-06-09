@@ -1,20 +1,25 @@
 Scool smallScool;
 Scool averageScool;
-Scool bigScool;
+Scool bigScool1;
+Scool bigScool2;
  
 void setupfishes() {
-  smallScool = new Scool(100, new PVector(12.5, -17.5, -7.5), 2.5, 0.05, 0.2);
-  averageScool = new Scool(50, new PVector(-12.5, -17.5, -7.5), 2.5, 0.25, 1);
-  bigScool = new Scool(3, new PVector(-22.5, -17.5, -7.5), 10, 2, 5);
-  smallScool.predators = bigScool;
-  averageScool.predators = bigScool;
+  smallScool = new Scool(200, new PVector(0, 0, 0), 2.5, 0.05, 0.2, 0.5);
+  averageScool = new Scool(100, new PVector(-12.5, -17.5, -7.5), 2.5, 0.25, 1, 1);
+  bigScool1 = new Scool(1, new PVector(-100.5, -17.5, -7.5), 10, 3, 6, 0.9);
+  bigScool2 = new Scool(2, new PVector(102.5, -17.5, -7.5), 10, 2, 5, 0.9);
+  smallScool.predators.add(bigScool1);
+  averageScool.predators.add(bigScool2);
+  bigScool1.prey = smallScool;
+  bigScool1.prey = averageScool;
   noStroke();
 }
  
 void drawfishes(float deltaTime) {
   smallScool.drawScool(deltaTime);
   averageScool.drawScool(deltaTime);
-  bigScool.drawScool(deltaTime);
+  bigScool1.drawScool(deltaTime);
+  bigScool2.drawScool(deltaTime);
 }
 
 class Scool {
@@ -22,15 +27,18 @@ class Scool {
   int scoolsize;
   PVector target=  new PVector(0,-2,0);
   ArrayList<PVector> avoidThese = new ArrayList<PVector>(); 
-  Scool predators; 
+  ArrayList<Scool>  predators = new ArrayList<Scool>(); 
+  Scool prey;
+  PVector scoolCenter;
 
   
-  Scool(int amount,PVector averageStartPosition, float positionSpread, float minsize, float maxSize ){
+  Scool(int amount,PVector averageStartPosition, float positionSpread, float minsize, float maxSize, float speedModifier ){
     scoolsize = amount;
     for (int i = 0; i < amount; i++) {
-      fishes.add(new Fish(averageStartPosition, positionSpread,  minsize,  maxSize));
+      fishes.add(new Fish(averageStartPosition, positionSpread,  minsize,  maxSize, speedModifier));
         
     }
+    scoolCenter = averageStartPosition;
     
     
 
@@ -41,13 +49,24 @@ class Scool {
   
   
   void drawScool(float deltaTime){
-    
-    
+    if (prey != null){
+      target = prey.scoolCenter;
+    }
+    int num = 0;
+    for (Fish f : fishes){     
+         scoolCenter.add(f.position);
+         num ++;
+         
+      
+    }  
+    if (num != 0){
+    scoolCenter.div(num);
+    }
     for (Fish f : fishes) {
       f.render(deltaTime);
     //  //println("rendering fish");
-    
-      f.step(fishes, deltaTime, target, avoidThese, 3, predators);
+      
+      f.step(fishes, deltaTime, target, avoidThese, 3, predators, scoolCenter.copy());
       
     } 
 
@@ -57,17 +76,22 @@ class Scool {
 }  
 
 
+
  
 class Fish {
   PVector position = new PVector(random(10, 15), random(-20, -15), random(-10, -5));
   PVector velocition = new PVector(random(-0.5, 0.5), random(-0.5, 0.5), random(-0.5, 0.5));
   float maxVelocity = random(4, 8);
-  float minVelosity = random(0.005, 0.05);
+  
   float maxVelocityChange = random(0.01, 0.05);
-  float searchDist = random(4, 7);
-  float contentDist = random(2, 4); 
-  float crowdedDist = random(0.5, 2);
-  float size = random(0.05, 0.2);
+
+  float searchDist = random(7, 10);
+    float size = random(0.05, 0.2);
+      float minVelosity = random(0.01*size, 0.1*size);
+  float contentDist = random(0.5*size, 2*size); 
+
+  float crowdedDist = random(size*0.1, size*2);
+  
   float tailPos = random(0, 1);
   float tailSpeed = random(25, 40);
   float maxMouthUp = random(0.1, 1);
@@ -75,18 +99,20 @@ class Fish {
   float moutSpeed = random(5, 10);
   color fishColor = color(random(0, 175), random(100, 255), 255);
   color finColor = color(random(0, 100), random(200, 255), random(100, 255));
-  float minDistToBottom = size*4;
+  float minDistToBottom = 0.3;
   //0 = calm , 5= terrified,
   int terror = 0;
-  
-  Fish(PVector averageStartPosition, float positionSpread, float minsize, float maxSize){
+  // 0 = not lonly, 1 = lonly;
+  int lonly = 0;
+  Fish(PVector averageStartPosition, float positionSpread, float minsize, float maxSize, float speedModifier){
         position = new PVector(random(averageStartPosition.x-positionSpread, averageStartPosition.x+positionSpread), random(averageStartPosition.y-positionSpread, averageStartPosition.y+positionSpread), random(averageStartPosition.z-positionSpread, averageStartPosition.z+positionSpread));
         size = random(minsize, maxSize);
+        maxVelocity = random(4*speedModifier, 8*speedModifier);
   }  
  
 
  
-  void step(ArrayList<Fish> fishes, float deltaTime, PVector target, ArrayList<PVector> avoidThese, float avoidDist, Scool predators) {
+  void step(ArrayList<Fish> fishes, float deltaTime, PVector target, ArrayList<PVector> avoidThese, float avoidDist, ArrayList<Scool> predators, PVector scoolCenter) {
     PVector center = new PVector();
     PVector avoid = new PVector();
     PVector toward = new PVector();
@@ -97,6 +123,7 @@ class Fish {
     float relativeMaxYVelocity = 0.5;
 
     center = findMass(this, fishes, searchDist, contentDist);
+    
     avoid = avoidFriends(this, fishes);
     toward = tovardPosition(this,target).mult(100);
     match = matchSpeed(this,fishes);
@@ -113,28 +140,33 @@ class Fish {
     if (terror <= 2){
       velocition.add(velocityChange);
     }
+    // check loneliness
+
+    
     //check for predators
     float distToPredator = 0;
     if (predators != null){
-    for (Fish predator : predators.fishes){
+    for (Scool predatorScool : predators){  
+    for (Fish predator : predatorScool.fishes){
          distToPredator = predator.position.dist(position);
-         if (distToPredator < 2){
+         if (distToPredator < size){
            terror = 5;
            
            PVector direction = position.copy().sub(predator.position).normalize();
            velocition = direction.mult(maxVelocity);
-           break;
+           
          }
+    }
     }
     }
     //to not collide in bottom
     float bottomY = -terrain.roughHeightAt(position.x,position.y);
     float bottomDist = abs(position.y-bottomY);
     if (velocition.y < 0 && bottomDist < minDistToBottom){
-      velocition.y += maxVelocityChange;
+      velocition.y += maxVelocityChange*0.2;
     } 
-    if (bottomDist < size*2){
-      velocition.y = maxVelocityChange;
+    if (bottomDist < -0.2){
+      velocition.y = 0.1;
     }  
     // Clamp y velocity
     if (abs(velocition.y) > maxVelocity * relativeMaxYVelocity *(terror+1)) {
@@ -495,10 +527,10 @@ class Fish {
     
  
    // println(position.toString());
-  }
+    }
 
 
   
   
-  
+
 }
