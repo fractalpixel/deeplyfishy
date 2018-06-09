@@ -149,8 +149,7 @@ void draw() {
   float fishTargetDist = 5;
   calcTargetPos(smallScool.target, time+31.32, fishTargetSpeed, fishTargetDist*0.8, 0.5); 
   calcTargetPos(averageScool.target, time + 9823.3, fishTargetSpeed*0.7, fishTargetDist*1.1, 0.6); 
-  calcTargetPos(bigScool.target, time+17234.32, fishTargetSpeed*2.2, fishTargetDist*1.4, 0.9); 
-
+  
 
   // Position camera
   int cameraMode = 3;
