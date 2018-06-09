@@ -33,6 +33,15 @@ float worblePos = 0f;
 Ruins ruins;
 Terrain terrain;
 
+PVector camPos = new PVector();
+PVector focusPos = new PVector();
+
+void calcTargetPos(PVector pos, float time, float speed, float mag, float yScale) {
+  pos.x = sinNoise(time + 782.213, speed) * mag;
+  pos.y = sinNoise(time + 3712.321, speed * yScale) * mag;
+  pos.z = sinNoise(time + 12.876, speed) * mag;
+}
+
 /*
  * settings() must be used when calling size with variable height and width
  */
@@ -47,6 +56,8 @@ void settings() {
  * Do all your one-time setup routines in here.
  */
 void setup() {
+  noSmooth();
+  
   randomSeed(872219);
   
   rectMode(CENTER);
@@ -99,11 +110,15 @@ void setup() {
   terrain = new Terrain(100, 100);
   terrain.init();
 
+
   ruins = new Ruins();
   ruins.init(terrain);
   
 }
 
+float sinNoise(float t, float x) {
+  return 0.5*sin(t * x) + 0.5*cos(t * 0.31232 * x) + 0.5*sin( (t * 0.123 + cos(t * 0.001351)) * 0.871 * x);
+}
 
 /*
  * Processing's drawing method
@@ -122,8 +137,17 @@ void draw() {
 
   // Position camera
   // TODO
-  camera.jump(-10,0,0);
-  camera.aim(0,0,0);
+  float camMoveSpeed = 0.1;
+  float camMoveSpeedY = camMoveSpeed * 0.2;
+  float camMoveDist = 50;
+
+  float focusPosSpeed = 0.1;
+  float focusPosDist = 50;
+
+  calcTargetPos(camPos, time, camMoveSpeed, camMoveDist, 0.2);
+  calcTargetPos(focusPos, time + 3125.342, focusPosSpeed, focusPosDist, 0.5);
+  camera.jump(camPos.x, camPos.y, camPos.z);
+  camera.aim(focusPos.x, focusPos.y, focusPos.z);
   camera.feed();
 
   // Get values from Rocket using 
@@ -138,22 +162,21 @@ void draw() {
 
   //lights();
 
-  // Sunlight
-  float sunWorbleAmount = (float) moonlander.getValue("sunWorbleAmount") * 100;
-  float sunWorbleSpeed = (float) moonlander.getValue("sunWorbleSpeed") / 10;
-  worblePos += deltaTime*sunWorbleSpeed;
-  directionalLight(255, 255, 255, sin(worblePos)*sunWorbleAmount, 10, cos(worblePos)*sunWorbleAmount);
-  
   // Ocean background
   shader(ocean);
   //fill(200, 50, 50);
   pushMatrix();
-  resetMatrix();
   // Center background on camera
-  translate(camera.position()[0], camera.position()[1], camera.position()[2]);
+  translate(camX, camY, camZ);
   sphere(200);
   popMatrix();
 
+  // Sunlight
+  float sunWorbleAmount = (float) moonlander.getValue("sunWorbleAmount");
+  float sunWorbleSpeed = (float) moonlander.getValue("sunWorbleSpeed");
+  worblePos += deltaTime*sunWorbleSpeed;
+  directionalLight(255, 255, 255, sin(worblePos)*sunWorbleAmount, 10, cos(worblePos)*sunWorbleAmount);
+  
   // Things in ocean
   shader(oceanLight);
 
