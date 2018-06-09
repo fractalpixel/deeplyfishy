@@ -15,7 +15,7 @@ class Scroller {
   
   float yPos = 1000;
   PFont font;
-  float creditsTime = 3f * 60f;
+  float creditsTime = 2f * 60f;
   
   Scroller() {
     String fontName = "Cinzel-Regular.ttf";    
