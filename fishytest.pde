@@ -35,7 +35,7 @@ class Scool {
     ArrayList<PVector> avoidThese = new ArrayList<PVector>(); 
     avoidThese.add(avoid);
     for (Fish f : fishes) {
-      f.render();
+      f.render(deltaTime);
     //  //println("rendering fish");
     
       f.step(fishes, deltaTime, target, avoidThese, 3);
@@ -59,85 +59,227 @@ class Fish {
   float contentDist = random(2, 4); 
   float crowdedDist = random(0.5, 2);
   float size = random(0.05, 0.2);
-  
+  float tailPos = random(0, 1);
+  float tailSpeed = random(30, 50);
+  float maxMouthUp = random(0.1, 1);
+  float moutPos = random(0, 1);
+  float moutSpeed = random(5, 10);
+  color fishColor = color(random(0, 175), random(100, 255), 255);
+  color finColor = color(random(0, 100), random(200, 255), random(100, 255));
  
-  void render() {
-    
+  void render(float deltaTime) {
+    tailPos += deltaTime;
+    moutPos += deltaTime;
     pushMatrix();
     
     //rotate(velocition);
     translate(position.x, position.y, position.z);
     scale(size);
+    
+    rotateY(radians(90));
+    rotateX(radians(180));
+    translate(0, 0.4, 0);
+    fill(220, 190, 100);
+    sphereDetail(10);
+    sphere(0.3);
+    translate(0.05, 0.1, 0.2);
+    fill(0,0,0);
+    sphere(0.1);
+    translate(0, 0, -0.4);
+    sphere(0.1);
+    translate(-0.05, -0.5, 0.2);
     beginShape(TRIANGLE); 
-    stroke(0,0,0);
+    fill(fishColor);
+
+    
+    //tail
+    fill(finColor);    
+    float tailz = sin(tailPos*tailSpeed)*(0.5);
+    vertex(-3, 0,0);
+    vertex(-4.5, 1, tailz);
+    vertex(-4, 0, tailz);
+    
+    vertex(-3, 0,0);
+    vertex(-4.5, -1, tailz);
+    vertex(-4, 0, tailz);
+    
+    //headfin
+    vertex(0,1,0);
+    vertex(-0.5, 1.5, -tailz*0.3);
+    vertex(-1,1, 0);
+    
+    vertex(-1,1, 0);
+    vertex(-0.5, 1.5, -tailz*0.3);
+    vertex(-1.5, 1.5, -tailz*0.3);
+    
+    //sidefin
+    float sidez = (sin(tailPos*tailSpeed)+1.5)/2.5;
+    vertex(0,0,0.5);
+    vertex(-1, -1, sidez);
+    vertex(-1, -0.5, sidez);
+    
+    vertex(0,0,-0.5);
+    vertex(-1, -1, -sidez);
+    vertex(-1, -0.5, -sidez);
+    
+    
+    
     //head
     //shape.stroke(0,0,255);
+    float mouty = ((sin(moutPos*moutSpeed)-1)*0.5)*(maxMouthUp);
+    fill(fishColor);
     normal(0, 0, -1);
     vertex(0,0,-0.5);
     normal(0, -1, 0);
     vertex(0,-1,0);
     normal(1, 0, 0);
-    vertex(1, 0,0);
+    vertex(1, mouty,0);
     
     normal(0, 0, -1);
     vertex(0,0,-0.5);
     normal(1, 0, 0);
-    vertex(1, 0,0);
+    vertex(1, -0.5*mouty,0);
     normal(0, 1, 0);
     vertex(0, 1,0);
      
     normal(1, 0, 0);
-    vertex(1, 0,0);
+    vertex(1, -0.5*mouty,0);
     normal(0, 1, 0);
     vertex(0, 1,0);
     normal(0, 0, 1);
     vertex(0,0,0.5);
     
     normal(1, 0, 0);
-    vertex(1, 0,0);
+    vertex(1, mouty,0);
     normal(0, 0, 1);
     vertex(0,0,0.5);
     normal(0, -1, 0);
     vertex(0,-1,0);
     
-    //Body
+    //moutIn
+    //down
+    fill(160, 30, 30);
+    normal(0, 1, 0);
+    vertex(1, mouty, 0);
+    vertex(0, 0, 0.5);
+    fill(0,0,0);
+    vertex(0, 0, 0);
+    fill(160, 30, 30);
+    
+    vertex(1, mouty, 0);
+    vertex(0, 0, -0.5);
+    fill(0,0,0);
+    vertex(0, 0, 0);
+    
+    //up
+    fill(160, 30, 30);
+    normal(0, -1, 0);
+    vertex(1, -mouty*0.5, 0);
+    vertex(0, 0, 0.5);
+    fill(0,0,0);
+    vertex(0, 0, 0);
+    fill(160, 30, 30);
+    
+    vertex(1, -mouty*0.5, 0);
+    vertex(0, 0, -0.5);
+    fill(0,0,0);
+    vertex(0, 0, 0);
+    
+    
+    fill(fishColor);
+    //Body front
+    normal(0, 0, -1);
+    vertex(0,0,-0.5);
+    normal(0, 1, 0);
+    vertex(0,1,0);
+    normal(0, 0, -1);
+    vertex(-1, 0, -0.5);
+    
+    normal(0, 0, -1);
+    vertex(-1, 0, -0.5);
+     normal(0, 1, 0);
+    vertex(0,1,0);
+     normal(0, 1, 0);
+    vertex(-1, 1, 0);
+    
+    normal(0, 0, 1);
+    vertex(0,0,0.5);
     normal(0, 1, 0);
     vertex(0,1,0);
     normal(0, 0, 1);
-    vertex(0, 0, -0.5);
-    normal(0, 0, -1);
-    vertex(-2, 0,0);
+    vertex(-1, 0, 0.5);
     
-    vertex(0,0, 0.5);
+    normal(0, 0, 1);
+    vertex(-1, 0, 0.5);
     normal(0, 1, 0);
-    normal(0, 0, -1);
     vertex(0,1,0);
+    normal(0, 1, 0);
+    vertex(-1, 1, 0);
+    
+     normal(0, 0, -1);
+    vertex(0,0,-0.5);
+      normal(0, -1, 0);
+    vertex(0,-1,0);
+     normal(0, 0, -1);
+    vertex(-1, 0, -0.5);
+    
+     normal(0, 0, -1);
+    vertex(-1, 0, -0.5);
+      normal(0, -1, 0);
+    vertex(0,-1,0);
+      normal(0, -1, 0);
+    vertex(-1, -1, 0);
+    
+     normal(0, 0, 1);
+    vertex(0,0,0.5);
+       normal(0, -1, 0);
+    vertex(0,-1,0);
     normal(0, 0, 1);
-    vertex(-2, 0,0);
+    vertex(-1, 0, 0.5);
+    
+    normal(0, 0, 1);
+    vertex(-1, 0, 0.5);
+       normal(0, -1, 0);
+    vertex(0,-1,0);
+       normal(0, -1, 0);
+    vertex(-1, -1, 0);
+    
+    
+    
+    
+    
+    //body back
+    normal(0, 1, 0);
+    vertex(-1,1,0);
+    normal(0, 0, -1);
+    vertex(-1, 0, -0.5);
+    normal(0, 0, -1);
+    vertex(-3, 0,0);
+    
+    normal(0, 0, 1);
+    vertex(-1,0, 0.5);
+    normal(0, 1, 0);
+    vertex(-1,1,0);
+    normal(0, 0, 1);
+    vertex(-3, 0,0);
     
     normal(0, -1, 0);
-    vertex(0, -1, 0);
+    vertex(-1, -1, 0);
     normal(0, 0, -1);
-    vertex(0, 0, -0.5);
+    vertex(-1, 0, -0.5);
     normal(0, 0, -1);
-    vertex(-2, 0,0);
+    vertex(-3, 0,0);
     
     normal(0, -1, 0);
-    vertex(0, -1, 0);
+    vertex(-1, -1, 0);
     normal(0, 0, 1);
-    vertex(0,0, 0.5);
+    vertex(-1,0, 0.5);
     normal(0, 0, 1);
-    vertex(-2, 0, 0);
+    vertex(-3, 0, 0);
     
-    //tail
-    float tailz = random(-0.2, 0.2);
-    vertex(-2, 0,0);
-    vertex(-3.5, 1, tailz);
-    vertex(-3, 0, tailz);
+
     
-    vertex(-2, 0,0);
-    vertex(-3.5, -1, tailz);
-    vertex(-3, 0, tailz);
+    
     
     
     endShape();
