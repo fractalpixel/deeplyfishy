@@ -34,9 +34,14 @@ float worblePos = 0f;
 
 Ruins ruins;
 Terrain terrain;
+Scroller scroller;
 
 PVector camPos = new PVector();
 PVector focusPos = new PVector();
+
+float sinNoise(float t, float x) {
+  return 0.5*sin(t * x) + 0.5*cos(t * 0.31232 * x) + 0.5*sin( (t * 0.123 + cos(t * 0.001351)) * 0.871 * x);
+}
 
 void calcTargetPos(PVector pos, float time, float speed, float mag, float yScale) {
   pos.x = sinNoise(time + 782.213, speed) * mag;
@@ -116,29 +121,39 @@ void setup() {
   ruins = new Ruins();
   ruins.init(terrain);
   
-}
-
-float sinNoise(float t, float x) {
-  return 0.5*sin(t * x) + 0.5*cos(t * 0.31232 * x) + 0.5*sin( (t * 0.123 + cos(t * 0.001351)) * 0.871 * x);
+  scroller = new Scroller();
+  
 }
 
 /*
  * Processing's drawing method
  */
 void draw() {
-  background(128);
+  background(0);
   fill(255);
+  resetShader();
 
   // Handles communication with Rocket
   moonlander.update();
 
   // Seconds since start
-  //float time = (float) moonlander.getCurrentTime();
-  float time = millis() / 1000.0;
+  float time = (float) moonlander.getCurrentTime();
+  //float time = millis() / 1000.0;
   float deltaTime = 1f / fps; 
 
+  // Render credits etc
+  scroller.render(time, deltaTime);
+
+  // Update fish targets
+  float fishTargetSpeed = 0.3;
+  float fishTargetDist = 5;
+  calcTargetPos(smallScool.target, time+31.32, fishTargetSpeed, fishTargetDist*0.8, 0.5); 
+  calcTargetPos(averageScool.target, time + 9823.3, fishTargetSpeed*0.7, fishTargetDist*1.1, 0.6); 
+  calcTargetPos(bigScool.target, time+17234.32, fishTargetSpeed*2.2, fishTargetDist*1.4, 0.9); 
+
+
   // Position camera
-  int cameraMode = 2;
+  int cameraMode = 3;
   if (cameraMode == 1 && smallScool.fishes.size() > 0) {
     // Chase fish
     Fish fish = smallScool.fishes.get(0);
@@ -152,6 +167,13 @@ void draw() {
     float camMoveDist = 20;
     focusPos.set(0,0,0);
     camPos.set(-cos(time*camMoveSpeed*TURN) * camMoveDist, 0, sin(time*camMoveSpeed*TURN) * camMoveDist);
+  }
+  else if (cameraMode == 3) {
+    // Credit cam
+    float camMoveSpeed = 0.03;
+    float camMoveDist = 20;
+    focusPos.set(0,0,0);
+    camPos.set(-cos(time*camMoveSpeed*TURN) * camMoveDist, 3, sin(time*camMoveSpeed*TURN) * camMoveDist*0.4+camMoveDist*0.8);
   }
   else {
     float camMoveSpeed = 0.1;
