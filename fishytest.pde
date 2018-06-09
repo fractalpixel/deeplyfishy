@@ -21,13 +21,22 @@ void drawfishes(float deltaTime) {
 class Scool {
   ArrayList<Fish> fishes = new ArrayList<Fish>();
   int scoolsize;
+
   
   Scool(int amount){
     scoolsize = amount;
     for (int i = 0; i < amount; i++) {
       fishes.add(new Fish());
+        
     }
+    
+    
+
+
+    
   }
+  
+  
   
   void drawScool(float deltaTime){
     PVector target=  new PVector(0,2,0);
@@ -37,10 +46,13 @@ class Scool {
     for (Fish f : fishes) {
       f.render();
     //  //println("rendering fish");
-      
+    
       f.step(fishes, deltaTime, target, avoidThese, 3);
       
     } 
+
+ 
+    
   }
 }  
 
@@ -56,29 +68,60 @@ class Fish {
   float contentDist = random(2, 4); 
   float crowdedDist = random(0.5, 2);
   float size = random(0.05, 0.2);
+  
  
   void render() {
-    /*pushMatrix();
+    
+    pushMatrix();
+    
+    //rotate(velocition);
     translate(position.x, position.y, position.z);
+    scale(size);
+    beginShape(TRIANGLE); 
+    stroke(0,0,0);
+    //head
+    //shape.stroke(0,0,255);
+    vertex(0,0,-0.5);
+    vertex(0,-1,0);
+    vertex(1, 0,0);
     
-    sphere(size);
-    popMatrix();*/
+    vertex(0,0,-0.5);
+    vertex(1, 0,0);
+    vertex(0, 1,0);
+     
+    vertex(1, 0,0);
+    vertex(0, 1,0);
+    vertex(0,0,0.5);
     
-    fill(48, 138,206,63);
-stroke(48,138,206,191);
-pushMatrix();
-float r = size;
-
- translate(position.x, position.y, position.z);
-beginShape();
-vertex(r*15.0, r*17.0, r); //Left wing tip
-vertex(r*25.0, r*10.0); //Left wing top point
-vertex(r*30.0, r*13.0, r*10.0); //middle
-vertex(r*35.0, r*10.0 ); //right wing top point
-vertex(r*45.0, r*17.0, r); //right wing tip
-vertex(r*30.0, r*13.0); //underpart
-endShape();
-popMatrix();
+    vertex(1, 0,0);
+    vertex(0,0,0.5);
+    vertex(0,-1,0);
+    
+    //Body
+    vertex(0,1,0);
+    vertex(0, 0, -0.5);
+    vertex(-2, 0,0);
+    
+    vertex(0,0, 0.5);
+    vertex(0,1,0);
+    vertex(-2, 0,0);
+    
+    vertex(0, -1, 0);
+    vertex(0, 0, -0.5);
+    vertex(-2, 0,0);
+    
+    vertex(0, -1, 0);
+    vertex(0,0, 0.5);
+    vertex(-2, 0, 0);
+    
+    
+    endShape();
+    //sphere(size);
+   
+    popMatrix();
+    
+    
+ 
    // println(position.toString());
   }
  
