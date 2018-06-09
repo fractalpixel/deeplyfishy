@@ -102,7 +102,8 @@ void draw() {
   fill(100, 200, 255);
   drawfishes();
   
+  // Red blob at origo
   fill(255, 0, 0);
-  sphere(10);
+  sphere(1);
 
 }
