@@ -14,8 +14,8 @@ float TURN = PI*2;
 // These control how big the opened window is.
 // Before you release your demo, set these to 
 // full HD resolution (1920x1080).
-int CANVAS_WIDTH = 1400;// 1920; //480;
-int CANVAS_HEIGHT = 800;//1080; // 360;
+int CANVAS_WIDTH = 1920; //480;
+int CANVAS_HEIGHT = 1080; // 360;
 
 int fps = 60;
 
@@ -60,7 +60,7 @@ void calcTargetPos(PVector pos, float time, float speed, float mag, float yScale
 void settings() {
   // Set up the drawing area size and renderer (P2D / P3D).
   size(CANVAS_WIDTH, CANVAS_HEIGHT, P3D);
-//  fullScreen(P3D);
+  fullScreen(P3D);
   randomSeed(8719);
   noiseSeed(2131);
 
