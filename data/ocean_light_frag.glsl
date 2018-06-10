@@ -26,7 +26,7 @@ void main() {
   vec4 color;
   intensity = max(0.0, dot(vertLightDir, vertNormal));
 
-  vec3 ambientLight = vec3(0.002, 0.05, 0.1);
+  vec3 ambientLight = vec3(0.005, 0.08, 0.22);
 
   vec2 ruinPos = vec2(round(vertTexCoord.x * 8), round(vertTexCoord.y * 8));
   float a = random(vec2(float(ruinPos.x)*12.21+float(ruinPos.y)*0.21 *ruins*0.1278, 120*ruins+0.1278));
@@ -42,11 +42,11 @@ void main() {
   float ruinExpandedPattern = min(1, max(0,min(a2-0.7, b2-0.7)) * 10);
   vec3 ruinsExpandColor = vec3(0.6, 0.4, 0.2) * ruinsExpanded * ruinExpandedPattern * ruinExpandedPattern;
 
-  vec3 atten = vec3(min(1.0, 1.0 / (distanceToCamera*0.8)), 
-                    min(1.0, 1.0 / (distanceToCamera*0.08)), 
-                    min(1.0, 1.0 / (distanceToCamera*0.008)));
+  vec3 atten = vec3(min(1.0, 1.0 / (distanceToCamera*0.5)), 
+                    min(1.0, 1.0 / (distanceToCamera*0.05)), 
+                    min(1.0, 1.0 / (distanceToCamera*0.005)));
 
-  vec4 oceanLight = vec4(vec3(0, 0.01, 0.03) * min(1.0,fade), 0.0);
+  vec4 oceanLight = vec4(vec3(0, 0.02, 0.04) * min(1.0,fade), 0.0);
   color = vec4((ruinsExpandColor + ambientLight + ruinMultiplier * atten * intensity) * min(1.0,fade), 1.0) * vertColor + oceanLight;
 
 
