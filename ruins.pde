@@ -14,9 +14,14 @@ class Ruins {
   }
   
   void render(float time, float deltaTime) {
+    
     for (RuinGroup group: groups) {
       group.render(time, deltaTime);
     }
+    
+    // Back to normal
+    oceanLight.set("ruins", 0f);
+    oceanLight.set("ruinsExpanded", 0f);
   }
 }
 
@@ -85,7 +90,10 @@ class Ruin {
     float ruinExtend = (float) moonlander.getValue("ruinExtend");
     
     float ruinDeltaY = -ruinRaise * levels * size;
-    
+
+    oceanLight.set("ruinsExpanded", max(0, sin(time*PI*2) * ruinExtend));
+        
+
     pushStyle();
     pushMatrix();
 
@@ -107,11 +115,15 @@ class Ruin {
 
     // Sub-blocks
     randomSeed((long)(seed*100));
-    if (random(0,1) < 0.8) {
-      int count = (int) (random(2, 3)*random(1, 4));
+    if (random(0,1) < 0.96) {
+      int count = (int) (random(2, 6)*random(2, 4));
       for (int i = 0; i < count; i++) {
-        randomSeed((long)(seed*100+i));
+        randomSeed((long)(seed*7876.76*i));
         pushMatrix();
+ 
+        // Tell shader we are rendering cool stuff now
+        oceanLight.set("ruins", random(0.7, 1.0));
+
         float r = blockColorR + random(-10, 10);
         float g = blockColorG + random(-10, 10);
         float b = blockColorB + random(-10, 10);

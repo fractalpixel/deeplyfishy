@@ -1,7 +1,7 @@
 
 String credits = 
   "Deeply Fishy\n"+
-  "Made at Graffathon 2018\n"+
+  "Coded in 24 hours at\nGraffathon 2018\n"+
   "by\n"+
   "FractalPixel\n"+
   "and\n"+
@@ -30,7 +30,8 @@ class Scroller {
     if (scrollSpeed > 0) {
      
       yPos -= deltaTime*200f * scrollSpeed;
-      fill(255, 255, 255);
+      int col = (int)(sin(time*PI*2*0.5) * 50);
+      fill(80, 190+col/3, 200+col);
       textAlign(CENTER, TOP);
       pushMatrix();
       scale(0.01f);
