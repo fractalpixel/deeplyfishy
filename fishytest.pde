@@ -1,13 +1,21 @@
 Scool smallScool;
+Scool smallScool2;
 Scool averageScool;
+Scool averageScool2;
+Scool averageScool3;
 Scool bigScool1;
 Scool bigScool2;
+Scool bigScool3;
  
 void setupfishes() {
-  smallScool = new Scool(200, new PVector(0, 0, 0), 2.5, 0.05, 0.2, 0.8, 50, 175, 235, 50, 200, 200);
-  averageScool = new Scool(100, new PVector(-22.5, -17.5, 167.5), 2.5, 0.25, 1, 1, 60, 125, 235, 50, 200, 50);
-  bigScool1 = new Scool(1, new PVector(-100.5, -17.5, -7.5), 10, 3, 6, 1.5, 50, 235, 160, 200, 50, 50);
-  bigScool2 = new Scool(2, new PVector(-102.5, -17.5, -7.5), 10, 2, 5, 1.5, 50, 235, 100, 200, 50, 50);
+  smallScool = new Scool(200, new PVector(0, 0, 0), 2.5, 0.1, 0.3, 0.8, 50, 175, 235, 50, 200, 200);
+  smallScool2 = new Scool(50, new PVector(22, -5,22), 2.5, 0.2, 0.5, 0.8, 160, 111, 55, 200, 60, 200);
+  averageScool = new Scool(100, new PVector(-22.5, -17.5, 117.5), 2.5, 0.25, 1, 1, 60, 125, 235, 50, 200, 50);
+  averageScool2 = new Scool(100, new PVector(4, -4, 1), 3.5, 1, 2, 1, 70, 125, 50, 200, 50, 50);
+  averageScool3 = new Scool(40, new PVector(4, -4, 1), 3.5, 2, 3, 1, 100, 55, 200, 200, 150, 50);
+  bigScool1 = new Scool(1, new PVector(-100.5, -17.5, 122.5), 10, 15, 20, 1.5, 50, 235, 160, 200, 50, 50);
+  bigScool2 = new Scool(2, new PVector(-102.5, -17.5, -100.5), 10, 2, 5, 1.5, 50, 235, 100, 200, 50, 50);
+  bigScool3 = new Scool(5, new PVector(302.5, -17.5, 300.5), 10, 12, 25, 1.5, 100, 125, 130, 80, 90, 110);
   smallScool.predators.add(bigScool1);
   averageScool.predators.add(bigScool2);
   bigScool1.prey = smallScool;
@@ -157,11 +165,11 @@ class Fish {
     for (Scool predatorScool : predators){  
     for (Fish predator : predatorScool.fishes){
          distToPredator = predator.position.dist(position);
-         if (distToPredator < size*2){
-           terror = 5 * (int)(1 / deltaTime);
+         if (distToPredator < 2){
+           terror = 4 * (int)(1 / deltaTime);
            
            PVector direction = position.copy().sub(predator.position).normalize();
-           velocition = direction.mult(maxVelocity);
+           velocition = direction.mult(maxVelocity*2);
            
          }
     }

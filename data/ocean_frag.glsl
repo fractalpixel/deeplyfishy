@@ -13,8 +13,8 @@ void main() {
   
   float upward = dot(vec3(0,1,0), vertNormal);
 
-  vec3 upColor = vec3(0.2, 0.4, 0.8);
-  vec3 midColor = vec3(0, 0.08, 0.15);
+  vec3 upColor = vec3(0.1, 0.7, 0.9);
+  vec3 midColor = vec3(0, 0.05, 0.15);
   vec3 downColor = vec3(0, 0.01, 0.05);
 
   vec3 color = vec3(0);  

@@ -60,6 +60,10 @@ void calcTargetPos(PVector pos, float time, float speed, float mag, float yScale
 void settings() {
   // Set up the drawing area size and renderer (P2D / P3D).
   size(CANVAS_WIDTH, CANVAS_HEIGHT, P3D);
+//  fullScreen(P3D);
+  randomSeed(8719);
+  noiseSeed(2131);
+
 }
 
 /*
@@ -69,8 +73,7 @@ void settings() {
  */
 void setup() {
   noSmooth();
-  
-  randomSeed(8719);
+  noCursor();
   
   rectMode(CENTER);
   
@@ -142,6 +145,12 @@ void draw() {
   // Handles communication with Rocket
   moonlander.update();
 
+  int stopNow = moonlander.getIntValue("stopNow");
+  if (stopNow >= 1) {
+    exit();
+  }
+
+
   // Seconds since start
   float time = (float) moonlander.getCurrentTime();
   //float time = millis() / 1000.0;
@@ -167,6 +176,10 @@ void draw() {
   float fishTargetDist = 5;
   calcTargetPos(smallScool.target, time+31.32, fishTargetSpeed, fishTargetDist*0.8, 0.5, 2); 
   calcTargetPos(averageScool.target, time + 9823.3, fishTargetSpeed*0.7, fishTargetDist*1.1, 0.6, -1); 
+  calcTargetPos(averageScool2.target, time + 732.3, fishTargetSpeed*1.2, fishTargetDist*0.8, 0.6, 0.5); 
+  smallScool2.target.set(20,-3, 10);
+  averageScool3.target.set(-20,-10, 30);
+  bigScool3.target.set(5, -16, -40);
 
   // Position camera
   int cameraMode = moonlander.getIntValue("cameraMode");
@@ -177,10 +190,10 @@ void draw() {
   if (cameraMode == 1 && bigScool1.fishes.size() > 0) {
     // Chase fish
     Fish fish = bigScool1.fishes.get(0);
-    float blend = 0.4f;
-    focusPos.set(bigScool1.scoolCenter);
-    //focusPos.set(fish.position);
-    camPos.lerp(camPos,focusPos,blend);
+    float blend = 0.5f;
+    //focusPos.set(bigScool1.scoolCenter);
+    focusPos.set(fish.position);
+    camPos.lerp(camPos,focusPos,baseCamMoveDist);
   }
   else if (cameraMode == 2) {
     // Slow rotate
