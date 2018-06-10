@@ -5,9 +5,9 @@ Scool bigScool2;
  
 void setupfishes() {
   smallScool = new Scool(200, new PVector(0, 0, 0), 2.5, 0.05, 0.2, 0.8, 50, 175, 235, 50, 200, 200);
-  averageScool = new Scool(100, new PVector(-12.5, -17.5, -7.5), 2.5, 0.25, 1, 1, 60, 125, 235, 50, 200, 50);
+  averageScool = new Scool(100, new PVector(-22.5, -17.5, 167.5), 2.5, 0.25, 1, 1, 60, 125, 235, 50, 200, 50);
   bigScool1 = new Scool(1, new PVector(-100.5, -17.5, -7.5), 10, 3, 6, 1.5, 50, 235, 160, 200, 50, 50);
-  bigScool2 = new Scool(2, new PVector(102.5, -17.5, -7.5), 10, 2, 5, 1.5, 50, 235, 100, 200, 50, 50);
+  bigScool2 = new Scool(2, new PVector(-102.5, -17.5, -7.5), 10, 2, 5, 1.5, 50, 235, 100, 200, 50, 50);
   smallScool.predators.add(bigScool1);
   averageScool.predators.add(bigScool2);
   bigScool1.prey = smallScool;
@@ -55,6 +55,7 @@ class Scool {
       target = prey.scoolCenter;
     }
     int num = 0;
+    scoolCenter.set(0,0,0);
     for (Fish f : fishes){     
          scoolCenter.add(f.position);
          num ++;
@@ -144,7 +145,7 @@ class Fish {
       velocityChange.normalize().mult(maxVelocityChange);  
     }
     //do normal swimming if not terrified
-    if (terror <= 2){
+    if (terror <= 2/deltaTime){
       velocition.add(velocityChange);
     }
     // check loneliness
@@ -157,7 +158,7 @@ class Fish {
     for (Fish predator : predatorScool.fishes){
          distToPredator = predator.position.dist(position);
          if (distToPredator < size*2){
-           terror = 5;
+           terror = 5 * (int)(1 / deltaTime);
            
            PVector direction = position.copy().sub(predator.position).normalize();
            velocition = direction.mult(maxVelocity);
@@ -176,17 +177,17 @@ class Fish {
       velocition.y = 0.1;
     }  
     // Clamp y velocity
-    if (abs(velocition.y) > maxVelocity * relativeMaxYVelocity *(terror+1)) {
+    if (abs(velocition.y) > maxVelocity * relativeMaxYVelocity *(terror*deltaTime+1)) {
       float sign = 1;
       if (velocition.y < 0) sign = -1;
-      velocition.y = sign * maxVelocity * relativeMaxYVelocity *(terror+1);
+      velocition.y = sign * maxVelocity * relativeMaxYVelocity *(terror*deltaTime+1);
     }
     //if terrified
-    if (terror >= 1){
-      if (velocition.mag() > maxVelocity*terror){
+    if (terror >= 1/deltaTime){
+      if (velocition.mag() > maxVelocity*terror*deltaTime){
          velocition.normalize().mult(maxVelocity); 
       }
-      else if (velocition.mag() < minVelosity*terror){
+      else if (velocition.mag() < minVelosity*terror*deltaTime){
         velocition.normalize().mult(minVelosity);
        
       }

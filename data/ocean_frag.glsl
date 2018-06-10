@@ -3,7 +3,7 @@ precision mediump float;
 precision mediump int;
 #endif
 
-// uniform float fraction;
+uniform float fade;
 
 varying vec4 vertColor;
 varying vec3 vertNormal;
@@ -27,6 +27,6 @@ void main() {
   
 
 
-  gl_FragColor = vec4(color,1);
+  gl_FragColor = vec4(color * fade,1);
 }
 

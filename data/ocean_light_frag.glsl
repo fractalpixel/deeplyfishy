@@ -3,7 +3,7 @@ precision mediump float;
 precision mediump int;
 #endif
 
-// uniform float fraction;
+uniform float fade;
 
 varying vec4 vertColor;
 varying vec3 vertNormal;
@@ -23,8 +23,8 @@ void main() {
                     min(1.0, 1.0 / (distanceToCamera*0.01)), 
                     min(1.0, 1.0 / (distanceToCamera*0.001)));
 
-  vec4 oceanLight = vec4(0, 0.04, 0.1, 0);
-  color = vec4(ambientLight + atten * intensity, 1.0) * vertColor + oceanLight;
+  vec4 oceanLight = vec4(vec3(0, 0.04, 0.1) * fade, 0);
+  color = vec4((ambientLight + atten * intensity) * fade, 1.0) * vertColor + oceanLight;
 
 
   gl_FragColor = color;

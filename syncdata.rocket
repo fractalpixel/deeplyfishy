@@ -5,30 +5,20 @@ beatsPerMin="125">
 	<track name="cameraMode" folded="0" muteKeyCount="0"
 color="ffb27474">
 		<key row="0" value="2.000000" interpolation="0" />
-		<key row="564" value="1.000000" interpolation="0" />
+		<key row="174" value="4.000000" interpolation="0" />
+		<key row="286" value="0.000000" interpolation="0" />
+		<key row="560" value="1.000000" interpolation="0" />
 		<key row="692" value="2.000000" interpolation="0" />
+		<key row="1096" value="0.000000" interpolation="0" />
+		<key row="1400" value="1.000000" interpolation="0" />
 	</track>
 	<track name="sunWorbleAmount" folded="0" muteKeyCount="0"
 color="ffb27474">
 		<key row="0" value="0.300000" interpolation="0" />
-		<key row="40" value="0.300000" interpolation="1" />
-		<key row="56" value="1.000000" interpolation="1" />
-		<key row="80" value="0.200000" interpolation="2" />
-		<key row="96" value="0.500000" interpolation="2" />
-		<key row="112" value="0.100000" interpolation="2" />
-		<key row="128" value="1.000000" interpolation="2" />
-		<key row="136" value="0.200000" interpolation="0" />
 	</track>
 	<track name="sunWorbleSpeed" folded="0" muteKeyCount="0"
 color="ffb28050">
 		<key row="0" value="3.000000" interpolation="0" />
-		<key row="40" value="3.000000" interpolation="1" />
-		<key row="56" value="10.000000" interpolation="1" />
-		<key row="80" value="5.000000" interpolation="2" />
-		<key row="96" value="10.000000" interpolation="2" />
-		<key row="112" value="5.000000" interpolation="2" />
-		<key row="128" value="20.000000" interpolation="2" />
-		<key row="136" value="5.000000" interpolation="0" />
 	</track>
 	<track name="ruinDanceFreq" folded="0" muteKeyCount="0"
 color="ff60b250">
@@ -77,16 +67,61 @@ color="ff4fb292">
 	<track name="camMoveSpeed" folded="0" muteKeyCount="0"
 color="ff4f71b2">
 		<key row="0" value="0.000000" interpolation="0" />
+		<key row="125" value="0.000000" interpolation="2" />
+		<key row="159" value="0.200000" interpolation="0" />
+		<key row="174" value="0.100000" interpolation="0" />
+		<key row="286" value="1.000000" interpolation="0" />
 		<key row="692" value="0.000000" interpolation="2" />
 		<key row="832" value="3.000000" interpolation="0" />
+		<key row="1096" value="0.700000" interpolation="0" />
 	</track>
 	<track name="camMoveDist" folded="0" muteKeyCount="0"
 color="ff8850b2">
 		<key row="0" value="1.000000" interpolation="0" />
-		<key row="35" value="1.000000" interpolation="2" />
-		<key row="69" value="2.000000" interpolation="0" />
+		<key row="35" value="0.500000" interpolation="2" />
+		<key row="69" value="0.800000" interpolation="2" />
+		<key row="128" value="2.000000" interpolation="0" />
+		<key row="174" value="0.200000" interpolation="0" />
+		<key row="286" value="0.200000" interpolation="0" />
 		<key row="692" value="1.000000" interpolation="2" />
 		<key row="832" value="2.000000" interpolation="0" />
+		<key row="1096" value="0.700000" interpolation="0" />
+	</track>
+	<track name="targetY" folded="0" muteKeyCount="0"
+color="ffb25091">
+		<key row="0" value="-30.000000" interpolation="2" />
+		<key row="32" value="-30.000000" interpolation="2" />
+		<key row="141" value="0.000000" interpolation="0" />
+		<key row="174" value="0.000000" interpolation="0" />
+		<key row="286" value="-10.000000" interpolation="2" />
+		<key row="520" value="10.000000" interpolation="0" />
+		<key row="1096" value="0.000000" interpolation="0" />
+	</track>
+	<track name="predatorSpeed" folded="0" muteKeyCount="0"
+color="ffb27474">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="1096" value="1.000000" interpolation="0" />
+	</track>
+	<track name="mediumFishSpeed" folded="0" muteKeyCount="0"
+color="ffb28050">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="70" value="1.000000" interpolation="0" />
+	</track>
+	<track name="fade" folded="0" muteKeyCount="0" color="ffa9b250">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="32" value="0.000000" interpolation="2" />
+		<key row="70" value="1.000000" interpolation="0" />
+	</track>
+	<track name="camZoom" folded="0" muteKeyCount="0"
+color="ff60b250" />
+	<track name="camY" folded="0" muteKeyCount="0" color="ff4fb292">
+		<key row="0" value="-10.000000" interpolation="0" />
+		<key row="33" value="-10.000000" interpolation="2" />
+		<key row="127" value="0.000000" interpolation="0" />
+		<key row="174" value="0.000000" interpolation="0" />
+		<key row="305" value="0.000000" interpolation="2" />
+		<key row="344" value="5.000000" interpolation="0" />
+		<key row="1096" value="0.000000" interpolation="0" />
 	</track>
 </tracks>
 	</rootElement>

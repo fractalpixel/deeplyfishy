@@ -70,7 +70,7 @@ void settings() {
 void setup() {
   noSmooth();
   
-  randomSeed(872219);
+  randomSeed(8719);
   
   rectMode(CENTER);
   
@@ -100,8 +100,9 @@ void setup() {
 
   // Load shader
   ocean = loadShader("ocean_frag.glsl", "ocean_vert.glsl");
-  // ocean.set("fraction", 1.0);
+  ocean.set("fade", 1.0);
   oceanLight = loadShader("ocean_light_frag.glsl", "ocean_light_vert.glsl");
+  oceanLight.set("fade", 1.0);
   
 
   // Parameters: 
@@ -149,36 +150,50 @@ void draw() {
   // Render credits etc
   scroller.render(time, deltaTime);
 
+  // Fading
+  float fade = (float) moonlander.getValue("fade");
+  ocean.set("fade", fade);
+  oceanLight.set("fade", fade);
+
+  // Update fish speed
+  float predatorSpeed = (float) moonlander.getValue("predatorSpeed");
+  bigScool1.scoolSpeedMod = predatorSpeed;
+  bigScool2.scoolSpeedMod = predatorSpeed;
+  float mediumSpeed = (float) moonlander.getValue("mediumFishSpeed");
+  averageScool.scoolSpeedMod = mediumSpeed;
+
   // Update fish targets
   float fishTargetSpeed = 0.05;
   float fishTargetDist = 5;
-  calcTargetPos(smallScool.target, time+31.32, fishTargetSpeed, fishTargetDist*0.8, 0.5, -10); 
-  calcTargetPos(averageScool.target, time + 9823.3, fishTargetSpeed*0.7, fishTargetDist*1.1, 0.6, -5); 
+  calcTargetPos(smallScool.target, time+31.32, fishTargetSpeed, fishTargetDist*0.8, 0.5, 2); 
+  calcTargetPos(averageScool.target, time + 9823.3, fishTargetSpeed*0.7, fishTargetDist*1.1, 0.6, -1); 
 
   // Position camera
   int cameraMode = moonlander.getIntValue("cameraMode");
   float baseCamMoveSpeed = (float) moonlander.getValue("camMoveSpeed");
   float baseCamMoveDist = (float) moonlander.getValue("camMoveDist");
   float targetY = (float) moonlander.getValue("targetY");
+  float cameraY = (float) moonlander.getValue("camY");
   if (cameraMode == 1 && bigScool1.fishes.size() > 0) {
     // Chase fish
     Fish fish = bigScool1.fishes.get(0);
-    float blend = 0.2f;
+    float blend = 0.4f;
     focusPos.set(bigScool1.scoolCenter);
+    //focusPos.set(fish.position);
     camPos.lerp(camPos,focusPos,blend);
   }
   else if (cameraMode == 2) {
     // Slow rotate
     float camMoveSpeed = 0.01 * baseCamMoveSpeed;
     float camMoveDist = 20 * baseCamMoveDist;
-    focusPos.set(0,0,targetY);
+    focusPos.set(0,targetY, 0);
     camPos.set(-cos(time*camMoveSpeed*TURN) * camMoveDist, 0, sin(time*camMoveSpeed*TURN) * camMoveDist);
   }
   else if (cameraMode == 3) {
     // Credit cam
     float camMoveSpeed = 0.03 * baseCamMoveSpeed;
     float camMoveDist = 20 * baseCamMoveDist;
-    focusPos.set(0,0,targetY);
+    focusPos.set(0,targetY, 0);
     camPos.set(-cos(time*camMoveSpeed*TURN) * camMoveDist, 3, sin(time*camMoveSpeed*TURN) * camMoveDist*0.4+camMoveDist*0.8);
   }
   else {
@@ -193,7 +208,7 @@ void draw() {
     calcTargetPos(focusPos, time + 3125.342, focusPosSpeed, focusPosDist, 0.5, targetY);
   }
   
-  camera.jump(camPos.x, camPos.y, camPos.z);
+  camera.jump(camPos.x, camPos.y + cameraY, camPos.z);
   camera.aim(focusPos.x, focusPos.y, focusPos.z);
   camera.feed();
 
@@ -215,7 +230,7 @@ void draw() {
   pushMatrix();
   // Center background on camera
   translate(camPos.x, camPos.y, camPos.z);
-  sphere(200);
+  sphere(160);
   popMatrix();
 
   // Sunlight

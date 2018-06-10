@@ -30,6 +30,7 @@ class Terrain {
   
   void init() {
     fill(220, 160, 120);
+    randomSeed(2131);
     terrainShape = createShape();
     terrainShape.beginShape(TRIANGLE);
     // terrainShape.stroke(0,255, 0);
